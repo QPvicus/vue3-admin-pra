@@ -14,5 +14,4 @@ const store = createStore({
 export function setStore(app: App) {
   app.use(store)
 }
-
 export default store

@@ -3,7 +3,7 @@ import { loadEnv } from 'vite'
 import { createAlias } from './build/vite/alias'
 import { wrapperEnv } from './build/utils'
 import { creatProxy } from './build/vite/proxy'
-import { createVitePlugins } from './build/plugins/index'
+import { createVitePlugins } from './build/vite/plugins/index'
 // https://vitejs.dev/config/
 export default ({ mode, command }: ConfigEnv): UserConfig => {
   const root = process.cwd()

@@ -1,4 +1,5 @@
 import { configWindiCssPlugin } from './windicss'
+import { styleImportPlugins } from './styleImport'
 import type { Plugin } from 'vite'
 
 import vue from '@vitejs/plugin-vue'
@@ -10,5 +11,8 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   // vite-plugin-windicss
   vitePlugins.push(configWindiCssPlugin())
+
+  // vite-plugin-styleImport
+  vitePlugins.push(styleImportPlugins())
   return vitePlugins
 }

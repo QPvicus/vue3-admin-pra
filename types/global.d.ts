@@ -1,5 +1,10 @@
 declare type Recordable<T extends any = any> = Record<string, T>
 
+declare type ReadonlyRecordable<T = any> = {
+  readonly [key: string]: T
+}
+
+declare type Nullable<T> = T | null
 declare interface ViteEnv {
   VITE_PORT: number
   VITE_USER_MOCK: boolean
