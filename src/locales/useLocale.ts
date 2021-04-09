@@ -4,11 +4,12 @@ import moment from 'moment'
 
 import { i18n } from './setupi18n'
 import { localeStore } from '/@/store/modules/locale'
+import { computed, unref } from 'vue'
 
 interface LangModule {
   message: Recordable
-  messageLocale: Recordable
-  messageLocaleName: string
+  momentLocale: Recordable
+  momentLocaleName: string
 }
 
 const loadLocalePool: LocaleType[] = []
@@ -23,4 +24,36 @@ function setI18nLanguage(locale: LocaleType) {
   document.querySelector('html')?.setAttribute('lang', locale)
 }
 
-export function useLocale() {}
+export function useLocale() {
+  const getLocale = computed(() => localeStore.getLocale)
+  const getShowLocalePicker = computed(() => localeStore.getShowPicker)
+  const getAntdLocale = computed(() => {
+    return i18n.global.getLocaleMessage(unref(getLocale))?.antdLacale
+  })
+
+  async function changeLocale(locale: LocaleType) {
+    const globalI18n = i18n.global
+    const currentLocale = unref(globalI18n.locale)
+    if (currentLocale === locale) return locale
+    if (currentLocale.includes(locale)) {
+      setI18nLanguage(locale)
+      return locale
+    }
+
+    const langModule = ((await import(`./lang/${locale}.ts`)) as any).default as LangModule
+    if (!langModule) return
+    const { message, momentLocale, momentLocaleName } = langModule
+    globalI18n.setLocaleMessage(locale, message)
+    moment.updateLocale(momentLocaleName, momentLocale)
+    loadLocalePool.push(locale)
+    setI18nLanguage(locale)
+    return locale
+  }
+
+  return {
+    getLocale,
+    getShowLocalePicker,
+    changeLocale,
+    getAntdLocale,
+  }
+}

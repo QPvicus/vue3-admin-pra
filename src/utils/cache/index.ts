@@ -16,7 +16,7 @@ export const createOptions = (storage: Storage, options: Options = {}): Options 
 export const webStorage = create(createOptions(sessionStorage))
 
 export const createStorage = (storage: Storage = sessionStorage, options: Options = {}) => {
-  return createOptions(storage, options)
+  return create(createOptions(storage, options))
 }
 
 export const createSessionStorage = (options: Options = {}) => {
