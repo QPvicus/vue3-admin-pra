@@ -11,6 +11,7 @@ const { fallback, availableLocales } = localeSetting
 async function createI18nOptions(): Promise<I18nOptions> {
   const locale = localeStore.getLocale
   const defaultLocale = await import(`./lang/${locale}.ts`)
+  console.log(defaultLocale.default)
   const message = defaultLocale.default?.message ?? {}
   return {
     locale,

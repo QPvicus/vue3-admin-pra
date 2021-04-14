@@ -10,8 +10,12 @@ import App from './App.vue'
 import router, { setRouter } from '/@/router'
 import { setStore } from '/@/store'
 import { setI18n } from './locales/setupi18n'
+
+import { registerGlobComp } from '/@/components/registerGlobComp'
 ;(async () => {
   const app = createApp(App)
+
+  registerGlobComp(app)
 
   await setI18n(app)
   // configure Routing

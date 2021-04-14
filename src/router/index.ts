@@ -3,7 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH as string),
-  routes: [],
+  routes: [{ path: '/login', component: () => import('/@/views/sys/login/Login.vue') }],
 })
 
 export function setRouter(app: App<Element>) {

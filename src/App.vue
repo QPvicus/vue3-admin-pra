@@ -2,6 +2,7 @@
   <config-provider>
     <a-button>aaa</a-button>
     hello world
+    <router-view />
   </config-provider>
 </template>
 
@@ -14,5 +15,6 @@
       ConfigProvider,
       Button,
     },
+    setup() {},
   })
 </script>

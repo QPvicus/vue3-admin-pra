@@ -21,7 +21,9 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
     if (envName === 'VITE_PROXY') {
       try {
         realName = JSON.parse(realName)
-      } catch (err) {}
+      } catch (err) {
+        console.log(2)
+      }
     }
     ret[envName] = realName
     process.env[envName] = realName

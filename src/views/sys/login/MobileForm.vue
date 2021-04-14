@@ -1,14 +1,14 @@
-<template>
-  <login-form-title />
-</template>
+<template> </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import LoginFormTitle from './LoginFormTitle.vue'
+  import { Button, Form, Input } from 'ant-design-vue'
   export default defineComponent({
     name: '',
     components: {
-      LoginFormTitle,
+      Button,
+      Form,
+      Input,
     },
   })
 </script>

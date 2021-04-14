@@ -19,14 +19,18 @@ export function getKey(namespace: string | undefined, key: string) {
   return `${namespace}.${key}`
 }
 
-export function useI18n(namespace?: string) {
+export function useI18n(
+  namespace?: string
+): {
+  t: I18nGlobalTranslation
+} {
   const normalFn = {
     t: (key: string) => {
       return getKey(namespace, key)
     },
   }
 
-  if (i18n) {
+  if (!i18n) {
     return normalFn
   }
   const { t, ...methods } = (i18n as any).global

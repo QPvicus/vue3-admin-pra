@@ -1,15 +1,9 @@
-<template>
-  <login-form-title />
-</template>
+<template> </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import LoginFormTitle from './LoginFormTitle.vue'
   export default defineComponent({
     name: '',
-    components: {
-      LoginFormTitle,
-    },
   })
 </script>
 

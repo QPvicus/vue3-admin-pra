@@ -8,10 +8,11 @@ import { createVitePlugins } from './build/vite/plugins/index'
 export default ({ mode, command }: ConfigEnv): UserConfig => {
   const root = process.cwd()
   const env = loadEnv(mode, root)
+  debugger
   const viteEnv = wrapperEnv(env)
   const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY, VITE_DROP_CONSOLE } = viteEnv
   const isBuild = command === 'build'
-
+  console.log(viteEnv)
   return {
     base: VITE_PUBLIC_PATH,
     root,
@@ -25,7 +26,7 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
     plugins: createVitePlugins(viteEnv, isBuild),
     server: {
       port: VITE_PORT,
-      // proxy: creatProxy(VITE_PROXY),
+      proxy: creatProxy(VITE_PROXY),
       hmr: {
         overlay: false,
       },
