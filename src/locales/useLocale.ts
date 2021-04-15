@@ -3,7 +3,7 @@ import { LocaleType } from '/#/config'
 import moment from 'moment'
 
 import { i18n } from './setupi18n'
-import { localeStore } from '/@/store/modules/locale'
+import { useLocaleStoreWithOut } from '/@/store/modules/locale'
 import { computed, unref } from 'vue'
 
 interface LangModule {
@@ -15,6 +15,7 @@ interface LangModule {
 const loadLocalePool: LocaleType[] = []
 
 function setI18nLanguage(locale: LocaleType) {
+  const localeStore = useLocaleStoreWithOut()
   if (i18n.mode === 'legacy') {
     i18n.global.locale = locale
   } else {
@@ -25,6 +26,7 @@ function setI18nLanguage(locale: LocaleType) {
 }
 
 export function useLocale() {
+  const localeStore = useLocaleStoreWithOut()
   const getLocale = computed(() => localeStore.getLocale)
   const getShowLocalePicker = computed(() => localeStore.getShowPicker)
   const getAntdLocale = computed(() => {

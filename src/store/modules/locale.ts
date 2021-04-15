@@ -1,41 +1,43 @@
-import store from '/@/store'
-import { VuexModule, Mutation, Action, Module, getModule } from 'vuex-module-decorators'
+import { store } from '/@/store'
 import { localeSetting } from '/@/settings/localeSetting'
 import { LocaleSetting, LocaleType } from '/#/config'
 import { createLocaleStorage } from '/@/utils/cache'
 import { LOCALE_KEY } from '/@/enums/cacheEnum'
-import { hotModuleUnregisterModule } from '/@/utils/helper/vuexHelper'
-const NAME = 'app-locale'
-
+import { defineStore } from 'pinia'
 const ls = createLocaleStorage()
-const lsSetting = (ls.get(LOCALE_KEY) || localeSetting) as LocaleSetting
+const lsLocaleSetting = (ls.get(LOCALE_KEY) || localeSetting) as LocaleSetting
 
-hotModuleUnregisterModule(NAME)
-@Module({ dynamic: true, store, name: NAME, namespaced: true })
-export default class Locale extends VuexModule {
-  private info: LocaleSetting = lsSetting
-
-  get getShowPicker(): boolean {
-    return !!this.info?.showPicker
-  }
-
-  get getLocale(): LocaleType {
-    return this.info?.locale
-  }
-
-  @Mutation
-  setLocaleInfo(info: Partial<LocaleSetting>): void {
-    this.info = { ...this.info, ...info }
-    ls.set(LOCALE_KEY, this.info)
-  }
-
-  @Action
-  initLocaleInfo() {
-    this.setLocaleInfo({
-      ...localeSetting,
-      ...this.info,
-    })
-  }
+interface LocaleState {
+  localeInfo: LocaleSetting
 }
 
-export const localeStore = getModule<Locale>(Locale)
+export const useLocaleStore = defineStore({
+  id: 'app-locale',
+  state: (): LocaleState => ({
+    localeInfo: lsLocaleSetting,
+  }),
+  getters: {
+    getShowPicker() {
+      return !!this.localeInfo?.showPicker
+    },
+    getLocale(): LocaleType {
+      return this.localeInfo?.locale ?? 'zh_CN'
+    },
+  },
+  actions: {
+    setLocaleInfo(info: Partial<LocaleSetting>) {
+      this.localeInfo = { ...this.localeInfo, ...info }
+      ls.set(LOCALE_KEY, this.localeInfo)
+    },
+    initLocale() {
+      this.setLocaleInfo({
+        ...localeSetting,
+        ...this.localeInfo,
+      })
+    },
+  },
+})
+
+export function useLocaleStoreWithOut() {
+  return useLocaleStore(store)
+}

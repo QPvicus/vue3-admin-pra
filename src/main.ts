@@ -14,13 +14,13 @@ import { setI18n } from './locales/setupi18n'
 import { registerGlobComp } from '/@/components/registerGlobComp'
 ;(async () => {
   const app = createApp(App)
+  setStore(app)
 
   registerGlobComp(app)
 
   await setI18n(app)
   // configure Routing
   setRouter(app)
-  setStore(app)
 
   // Mount when router is ready
   await router.isReady()

@@ -1,5 +1,4 @@
 import { i18n } from '/@/locales/setupi18n'
-
 type I18nGlobalTranslation = {
   (key: string): string
   (key: string, locale: string): string

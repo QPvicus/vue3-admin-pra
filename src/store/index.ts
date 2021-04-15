@@ -1,17 +1,10 @@
 import type { App } from 'vue'
 
-import { createStore } from 'vuex'
+import { createPinia } from 'pinia'
 
-import { config } from 'vuex-module-decorators'
-import { isDevMode } from '/@/utils/env'
-
-config.rawError = true
-
-const store = createStore({
-  strict: isDevMode(),
-})
+const store = createPinia()
 
 export function setStore(app: App) {
   app.use(store)
 }
-export default store
+export { store }
