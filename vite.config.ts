@@ -4,6 +4,7 @@ import { createAlias } from './build/vite/alias'
 import { wrapperEnv } from './build/utils'
 import { creatProxy } from './build/vite/proxy'
 import { createVitePlugins } from './build/vite/plugins/index'
+import { generateModifyVars } from './build/generate/generateModifyVars'
 // https://vitejs.dev/config/
 export default ({ mode, command }: ConfigEnv): UserConfig => {
   const root = process.cwd()
@@ -34,9 +35,15 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
     css: {
       preprocessorOptions: {
         less: {
+          modifyVars: generateModifyVars(),
           javascriptEnabled: true,
         },
       },
+    },
+    define: {
+      __VUE_I18N_LEGACY_API__: false,
+      __VUE_I18N_FULL_INSTALL__: false,
+      __INTLIFY_PROD_DEVTOOLS__: false,
     },
   }
 }
