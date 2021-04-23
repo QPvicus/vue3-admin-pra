@@ -1,3 +1,5 @@
+import { CacheTypeEnum } from '/@/enums/cacheEnum'
+
 export type LocaleType = 'zh_CN' | 'en'
 
 export interface LocaleSetting {
@@ -31,4 +33,8 @@ export interface GlobEnvConfig {
   VITE_GLOB_APP_SHORT_NAME: string
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string
+}
+
+export interface ProjectConfig {
+  permissionCacheTpe: CacheTypeEnum
 }

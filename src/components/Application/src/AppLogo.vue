@@ -1,6 +1,6 @@
 <template>
-  <div class="vben-app-logo antion" :class="[prefixCls, theme]" @click="handleGoHome">
-    <img src="../../../assets/images/logo.png" alt="" />
+  <div class="anticon" :class="[prefixCls, theme]" @click="handleGoHome">
+    <img src="../../../assets/images/logo.png" />
     <div
       class="ml-2 truncate md:opacity-100"
       :class="[
@@ -33,7 +33,6 @@
     setup() {
       const { prefixCls } = useDesign('app-logo')
       const { title } = useGlobSetting()
-
       const go = useGo()
       function handleGoHome() {
         go(PageEnum.BASE_HOME)

@@ -1,6 +1,14 @@
 @import './var/index.less';
 @import './public.less';
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+:-webkit-autofill {
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
 html {
   overflow: hidden;
   // css3 文字缩放
@@ -13,4 +21,13 @@ body {
   height: 100%;
   overflow: visible !important;
   overflow-x: hidden !important;
+}
+
+a:focus,
+a:active,
+button,
+div,
+svg,
+span {
+  outline: none !important;
 }

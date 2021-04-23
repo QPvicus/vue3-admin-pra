@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, ref, toRefs } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { prefixCls } from '/@/settings/designSetting'
+  import { createAppProviderContext } from './useAppContext'
   export default defineComponent({
     name: 'AppProvider',
     inheritAttrs: false,
@@ -9,7 +10,9 @@
       prefixCls: propTypes.string.def(prefixCls),
     },
     setup(props, { slots }) {
-      props
+      const { prefixCls } = toRefs(props)
+      const isMobile = ref(false)
+      createAppProviderContext({ prefixCls, isMobile })
       return () => slots.default?.()
     },
   })
