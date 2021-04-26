@@ -35,7 +35,7 @@
       </ACol>
     </ARow>
     <FormItem class="enter-x min-w-full">
-      <Button block type="primary" size="large" :loading="loading">
+      <Button block type="primary" size="large" :loading="loading" @click="handleLogin">
         {{ t('sys.login.loginButton') }}
       </Button>
     </FormItem>
@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, reactive, ref, unref } from 'vue'
+  import { computed, defineComponent, reactive, ref, toRaw, unref } from 'vue'
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue'
   import {
     GithubFilled,
@@ -83,6 +83,8 @@
   import { useI18n } from '/@/hooks/web/usei18n'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { onKeyStroke } from '@vueuse/core'
+  import { useUserStore } from '/@/store/modules/user'
+  import { useMessage } from '/@/hooks/web/useMessage'
   export default defineComponent({
     name: 'LoginForm',
     components: {
@@ -107,6 +109,8 @@
       const { t } = useI18n()
       const { prefixCls } = useDesign('login')
       const { getFormRules } = useFormRules()
+      const userStore = useUserStore()
+      const { notification } = useMessage()
       const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
       const formRef = ref()
       const rememberMe = ref(false)
@@ -125,7 +129,22 @@
         if (!data) return
         try {
           loading.value = true
-        } catch (err) {}
+          const userInfo = await userStore.login(
+            toRaw({
+              username: data.username,
+              password: data.Password,
+            })
+          )
+          if (userInfo) {
+            notification.success({
+              message: t('sys.login.loginSuccessTitle'),
+              description: `${t('sys.login.loginSuccessDesc')} ${userInfo.realName}`,
+              duration: 3,
+            })
+          }
+        } finally {
+          loading.value = false
+        }
       }
 
       return {
@@ -139,6 +158,7 @@
         setLoginState,
         LoginStateEnum,
         getFormRules,
+        handleLogin,
       }
     },
   })

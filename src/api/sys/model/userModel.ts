@@ -16,9 +16,19 @@ export interface getUserInfoByIdParams {
 }
 
 export interface GetUserInfoByUserIdModel {
-  roles: RoleEnum[]
+  roles: RoleInfo[]
   userId: string | number
   username: string
   realName: string
   desc?: string
+}
+
+export interface RoleInfo {
+  roleName: string
+  value: string
+}
+export interface LoginResultModel {
+  userId: string | number
+  role: RoleInfo
+  token: string
 }
