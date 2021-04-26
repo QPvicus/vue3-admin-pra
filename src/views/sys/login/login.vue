@@ -3,6 +3,7 @@
     <span class="-enter-x xl:hidden">
       <AppLogo :alwaysShowTitle="true" />
     </span>
+
     <div class="container relative h-full py-2 mx-auto sm:px-10">
       <div class="flex h-full">
         <div class="hidden xl:flex xl:flex-col xl:w-6/12 min-h-full mr-4 pl-4">
@@ -23,6 +24,10 @@
             class="my-auto mx-auto xl:ml-20 xl:bg-transparent px-5 py-8 sm:px-8 xl:p-4 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto enter-x relative"
           >
             <LoginForm />
+            <!-- <ForgetPasswordForm />
+            <RegisterForm />
+            <MobileForm />
+            <QrCodeForm /> -->
           </div>
         </div>
       </div>
@@ -62,7 +67,8 @@
   .@{prefix-cls} {
     overflow: hidden;
     @media (max-width: @screen-xl) {
-      background-color: @dark-bg;
+      background-color: #293146;
+
       .@{prefix-cls}-form {
         background-color: #fff;
       }
@@ -70,14 +76,14 @@
 
     &::before {
       position: absolute;
-      width: 100%;
-      height: 100%;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
+      margin-left: -48%;
       background-image: url(/@/assets/svg/login-bg.svg);
-      transform: translateX(-48%);
-      background-repeat: no-repeat;
       background-position: 100%;
+      background-repeat: no-repeat;
       background-size: auto 100%;
       content: '';
       @media (max-width: @screen-xl) {
@@ -117,38 +123,40 @@
       }
     }
 
-    input:not([type='checkbox']) {
-      min-width: 360px;
-      @media (max-width: @screen-lg) {
-        min-width: 300px;
-      }
-      @media (max-width: @screen-md) {
-        min-width: 280px;
-      }
-      @media (max-width: @screen-sm) {
-        min-width: 180px;
-      }
-    }
-
     &-sign-in-way {
       .anticon {
         font-size: 22px;
         color: #888;
         cursor: pointer;
-      }
 
-      &:hover {
-        color: @primary-color;
+        &:hover {
+          color: @primary-color;
+        }
       }
     }
 
+    input:not([type='checkbox']) {
+      min-width: 340px;
+
+      @media (max-width: @screen-lg) {
+        min-width: 300px;
+      }
+
+      @media (max-width: @screen-md) {
+        min-width: 260px;
+      }
+
+      @media (max-width: @screen-sm) {
+        min-width: 180px;
+      }
+    }
     .@{countdown-prefix-cls} input {
       min-width: unset;
     }
 
     .ant-divider-inner-text {
       font-size: 12px;
-      color: rgba(0, 0, 0, 0.45);
+      color: @text-color-secondary;
     }
   }
 </style>

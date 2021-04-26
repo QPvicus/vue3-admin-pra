@@ -1,21 +1,28 @@
-import { PageEnum } from '/@/enums/pageEnums'
+import { useMessage } from '/@/hooks/web/useMessage'
 import { useI18n } from '/@/hooks/web/usei18n'
 import router from '/@/router'
+import { PageEnum } from '/@/enums/pageEnums'
 
-const error = function (str: string) {}
+const { createMessage } = useMessage()
+
+const error = createMessage.error!
 export function checkStatus(status: number, msg: string): void {
   const { t } = useI18n()
   switch (status) {
     case 400:
       error(`${msg}`)
       break
+    // 401: Not logged in
+    // Jump to the login page if not logged in, and carry the path of the current page
+    // Return to the current page after successful login. This step needs to be operated on the login page.
     case 401:
       error(t('sys.api.errMsg401'))
       router.push(PageEnum.BASE_LOGIN)
       break
     case 403:
-      console.error(t('sys.api.errMsg403'))
+      error(t('sys.api.errMsg403'))
       break
+    // 404请求不存在
     case 404:
       error(t('sys.api.errMsg404'))
       break

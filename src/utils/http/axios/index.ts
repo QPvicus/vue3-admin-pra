@@ -3,7 +3,7 @@ import { deepMerge, setObjToUrlParams } from '../..'
 import { getToken } from '../../auth'
 import { isString } from '../../is'
 import { VAxios } from './Axios'
-import { AxiosTransform, CreateAxiosOptions } from './AxiosTransform'
+import { AxiosTransform, CreateAxiosOptions } from './axiosTransform'
 import { checkStatus } from './checkStatus'
 import { errorResult } from './const'
 import { createNow, formateRequestDate } from './helper'
@@ -12,7 +12,9 @@ import { ContentTypeEnum, RequestEnum, ResultEnum } from '/@/enums/httpEnum'
 import { useGlobSetting } from '/@/hooks/setting'
 import { useI18n } from '/@/hooks/web/usei18n'
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog'
+import { useMessage } from '/@/hooks/web/useMessage'
 
+const { createMessage, createErrorModal } = useMessage()
 const globSetting = useGlobSetting()
 const prefix = globSetting.urlPrefix
 /**
@@ -36,9 +38,9 @@ const transform: AxiosTransform = {
     if (!hasSuccess) {
       if (message) {
         if (options.errorMessageMode === 'modal') {
-          // web useMessage
+          createErrorModal({ title: t('sys.api.errorTip'), content: message })
         } else if (options.errorMessageMode === 'message') {
-          //  create Message
+          createMessage.error(message)
         }
       }
       Promise.reject(new Error(message))
@@ -53,10 +55,11 @@ const transform: AxiosTransform = {
     //  请求接口错误
     if (code === ResultEnum.ERROR) {
       if (message) {
-        // createMessage
+        createMessage.error(data.message)
         Promise.reject(new Error(message))
       } else {
         const msg = t('sys.api.errorMessage')
+        createMessage.error(msg)
         Promise.reject(new Error(msg))
       }
 
@@ -66,7 +69,10 @@ const transform: AxiosTransform = {
     //  登录超时
     if (code === ResultEnum.TIMEOUT) {
       const timeoutMsg = t('sys.api.timeoutMessage')
-      //  createModal
+      createErrorModal({
+        title: t('sys.api.operationFailed'),
+        content: timeoutMsg,
+      })
       Promise.reject(new Error(timeoutMsg))
       return errorResult
     }
@@ -134,10 +140,13 @@ const transform: AxiosTransform = {
     const err: string = error?.toString?.() ?? ''
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        // createMessage
+        createMessage.error(t('sys.api.apiTimeoutMessage'))
       }
       if (err.includes('Network Error')) {
-        //  createModel
+        createErrorModal({
+          title: t('sys.api.networkException'),
+          content: t('sys.api.networkExceptionMsg'),
+        })
       }
     } catch (err) {
       throw new Error(err)

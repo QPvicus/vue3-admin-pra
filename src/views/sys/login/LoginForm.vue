@@ -28,17 +28,18 @@
       </ACol>
       <ACol :span="12">
         <FormItem :style="{ 'text-align': 'right' }">
-          <Button type="link" size="small" @clikc="setLoginState(LoginStateEnum.RESET_PASSWORD)">
+          <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">
             {{ t('sys.login.forgetPassword') }}
           </Button>
         </FormItem>
       </ACol>
     </ARow>
-    <FormItem class="enter-x">
+    <FormItem class="enter-x min-w-full">
       <Button block type="primary" size="large" :loading="loading">
         {{ t('sys.login.loginButton') }}
       </Button>
     </FormItem>
+
     <ARow>
       <ACol :xs="24" :md="8">
         <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
@@ -57,7 +58,7 @@
       </ACol>
     </ARow>
     <Divider>{{ t('sys.login.otherSignIn') }}</Divider>
-    <div class="flex justify-evently enter-x" :class="`${prefixCls}-sign-in-way`">
+    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
       <GithubFilled />
       <WechatFilled />
       <AlipayCircleFilled />
@@ -143,4 +144,8 @@
   })
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+  :deep(.ant-form-item-control-wrapper) {
+    min-width: 100% !important;
+  }
+</style>
