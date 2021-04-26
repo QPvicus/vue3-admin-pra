@@ -1,36 +1,41 @@
 import type { UserConfig, ConfigEnv } from 'vite'
 import { loadEnv } from 'vite'
-import { createAlias } from './build/vite/alias'
+import { resolve } from 'path'
 import { wrapperEnv } from './build/utils'
-import { creatProxy } from './build/vite/proxy'
+import { createProxy } from './build/vite/proxy'
 import { createVitePlugins } from './build/vite/plugins/index'
 import { generateModifyVars } from './build/generate/generateModifyVars'
 // https://vitejs.dev/config/
+function resolvePath(dir: string) {
+  return resolve(process.cwd(), '.', dir)
+}
+
 export default ({ mode, command }: ConfigEnv): UserConfig => {
   const root = process.cwd()
   const env = loadEnv(mode, root)
-  debugger
   const viteEnv = wrapperEnv(env)
-  const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY, VITE_DROP_CONSOLE } = viteEnv
+  const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY } = viteEnv
   const isBuild = command === 'build'
-  console.log(viteEnv)
   return {
     base: VITE_PUBLIC_PATH,
     root,
     resolve: {
-      alias: createAlias([
-        ['/@/', 'src'],
-        ['/#/', 'types'],
-      ]),
+      alias: [
+        {
+          find: /\/@\//,
+          replacement: resolvePath('src') + '/',
+        },
+        {
+          find: /\/#\//,
+          replacement: resolvePath('types') + '/',
+        },
+      ],
     },
     // plugins: [vue(), vueJsx()],
     plugins: createVitePlugins(viteEnv, isBuild),
     server: {
       port: VITE_PORT,
-      proxy: creatProxy(VITE_PROXY),
-      hmr: {
-        overlay: false,
-      },
+      proxy: createProxy(VITE_PROXY),
     },
     css: {
       preprocessorOptions: {

@@ -22,3 +22,11 @@ export function isNullOrUndef(val: unknown): val is null | undefined {
 export function isString(val: unknown): val is String {
   return is(val, 'String')
 }
+
+export function isFunction(val: unknown): val is Function {
+  return typeof val === 'function'
+}
+
+export function isObject(val: unknown): val is Record<any, any> {
+  return val !== null && is(val, 'Object')
+}

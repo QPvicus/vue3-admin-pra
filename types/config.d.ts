@@ -37,4 +37,5 @@ export interface GlobEnvConfig {
 
 export interface ProjectConfig {
   permissionCacheTpe: CacheTypeEnum
+  useErrorHandler: boolean
 }
