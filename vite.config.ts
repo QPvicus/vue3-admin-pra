@@ -16,6 +16,7 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
   const viteEnv = wrapperEnv(env)
   const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY } = viteEnv
   const isBuild = command === 'build'
+  console.log(VITE_PROXY, 'VITE_PROXY')
   return {
     base: VITE_PUBLIC_PATH,
     root,
@@ -36,6 +37,13 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
     server: {
       port: VITE_PORT,
       proxy: createProxy(VITE_PROXY),
+      // proxy: {
+      //   '/basic-api': {
+      //     target: 'http://localhost:3102/basic-api/',
+      //     changeOrigin: true,
+      //     ws: true,
+      //   },
+      // },
     },
     css: {
       preprocessorOptions: {

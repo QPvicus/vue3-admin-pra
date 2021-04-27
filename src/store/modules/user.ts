@@ -10,7 +10,7 @@ import {
   LoginParams,
 } from '/@/api/sys/model/userModel'
 import { ErrorMessageMode } from '/@/utils/http/axios/type'
-import { getUserByUserId, loginApi } from '/@/api/sys/user'
+import { getUserInfoById, loginApi } from '/@/api/sys/user'
 import router from '/@/router'
 import { PageEnum } from '/@/enums/pageEnums'
 import { store } from '..'
@@ -70,11 +70,12 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params
         const data = await loginApi(loginParams, mode)
         const { userId, token } = data
+        console.log(userId, token)
 
         // save token
         this.setToken(token)
         // get user info
-        const userInfo = await this.getUserInAction({ userId })
+        const userInfo = await this.getUserInfoAction({ userId })
 
         goHome && (await router.replace(PageEnum.BASE_HOME))
         return userInfo
@@ -82,8 +83,8 @@ export const useUserStore = defineStore({
         return null
       }
     },
-    async getUserInAction({ userId }: getUserInfoByIdParams) {
-      const userInfo = await getUserByUserId({ userId })
+    async getUserInfoAction({ userId }: getUserInfoByIdParams) {
+      const userInfo = await getUserInfoById({ userId })
       const { roles } = userInfo
       const roleList = roles.map((item) => item.value) as RoleEnum[]
       this.setUserInfo(userInfo)

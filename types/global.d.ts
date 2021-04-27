@@ -7,7 +7,7 @@ declare type ReadonlyRecordable<T = any> = {
 declare type Nullable<T> = T | null
 declare interface ViteEnv {
   VITE_PORT: number
-  VITE_USER_MOCK: boolean
+  VITE_USE_MOCK: boolean
   VITE_USE_PWA: boolean
   VITE_PUBLIC_PATH: string
   VITE_PROXY: [string, string][]

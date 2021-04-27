@@ -24,7 +24,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
   )
 }
 
-export function getUserByUserId(params: getUserInfoByIdParams) {
+export function getUserInfoById(params: getUserInfoByIdParams) {
   return defHttp.get<GetUserInfoByUserIdModel>({
     url: Api.GetUserInfoById,
     params,

@@ -116,7 +116,7 @@
       const rememberMe = ref(false)
       const loading = ref(false)
       const formData = reactive({
-        account: 'taylor',
+        account: 'vben',
         password: '123456',
       })
 
@@ -126,13 +126,14 @@
 
       async function handleLogin() {
         const data = await validate()
+        console.log(data)
         if (!data) return
         try {
           loading.value = true
           const userInfo = await userStore.login(
             toRaw({
-              username: data.username,
-              password: data.Password,
+              username: data.account,
+              password: data.password,
             })
           )
           if (userInfo) {

@@ -6,10 +6,10 @@ export enum ResultEnum {
 }
 
 export enum RequestEnum {
-  GET = 'get',
-  POST = 'post',
-  DELETE = 'delete',
-  PUT = 'put',
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
 }
 
 export enum ContentTypeEnum {
