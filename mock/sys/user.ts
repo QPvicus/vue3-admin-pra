@@ -63,7 +63,6 @@ export default [
     method: 'get',
     response: ({ query }) => {
       const { userId } = query
-      console.log(userId, 'query')
       const checkUser = createFakeUserList().find((item) => item.userId === userId)
       if (!checkUser) {
         return resultError('The corresponding user information was not obtained!')
