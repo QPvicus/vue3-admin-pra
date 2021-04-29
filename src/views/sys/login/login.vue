@@ -42,7 +42,7 @@
   import { useI18n } from '/@/hooks/web/usei18n'
   import { useDesign } from '/@/hooks/web/useDesign'
   export default defineComponent({
-    name: '',
+    name: 'Login',
     components: {
       LoginForm,
       AppLogo,

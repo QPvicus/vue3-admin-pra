@@ -1,6 +1,7 @@
 import { configWindiCssPlugin } from './windicss'
 import { styleImportPlugins } from './styleImport'
 import { configHmrPlugin } from './hmr'
+import { configHtmlPlugin } from './html'
 import type { Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -10,6 +11,9 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   const { VITE_USE_MOCK } = viteEnv
   const vitePlugins: (Plugin | Plugin[])[] = [vue(), vueJsx()]
   !isBuild && vitePlugins.push(configHmrPlugin())
+
+  // vite-plugin-html
+  vitePlugins.push(configHtmlPlugin(viteEnv, isBuild))
 
   // vite-plugin-windicss
   vitePlugins.push(configWindiCssPlugin())
