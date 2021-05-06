@@ -9,6 +9,7 @@
   "dependencies": {
     "@iconify/iconify": "^1.0.7",
     "@vueuse/core": "^4.4.1",
+    "@zxcvbn-ts/core": "^0.3.0",
     "ant-design-vue": "^2.1.2",
     "apexcharts": "^3.26.0",
     "axios": "^0.21.1",
