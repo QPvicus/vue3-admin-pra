@@ -37,13 +37,6 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
     server: {
       port: VITE_PORT,
       proxy: createProxy(VITE_PROXY),
-      // proxy: {
-      //   '/basic-api': {
-      //     target: 'http://localhost:3102/basic-api/',
-      //     changeOrigin: true,
-      //     ws: true,
-      //   },
-      // },
     },
     css: {
       preprocessorOptions: {

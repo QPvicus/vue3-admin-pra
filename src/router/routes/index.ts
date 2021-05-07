@@ -5,6 +5,7 @@ import { t } from '/@/hooks/web/usei18n'
 import type { AppRouteModule, AppRouteRecordRaw } from '../types'
 
 const modules = import.meta.globEager('./modules/**/*.ts')
+console.log(modules)
 const routeModuleList: AppRouteModule[] = []
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {}

@@ -1,22 +1,19 @@
 <template>
-  <Layout :class="prefixCls">
-    <LayoutHeader />
-  </Layout>
+  <Header>
+    <!-- left  -->
+  </Header>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { Layout } from 'ant-design-vue'
-  import LayoutHeader from './header/index.vue'
   import { useDesign } from '/@/hooks/web/useDesign'
+  import { Layout } from 'ant-design-vue'
   export default defineComponent({
-    name: 'DefaultLayout',
     components: {
-      Layout,
-      LayoutHeader,
+      Header: Layout.Header,
     },
     setup() {
-      const { prefixCls } = useDesign('default-layout')
+      const { prefixCls } = useDesign('layout-header')
       return {
         prefixCls,
       }

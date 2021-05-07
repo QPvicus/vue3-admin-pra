@@ -5,6 +5,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { REDIRECT_NAME } from './constant'
 import { basicRoutes, LoginRoute } from './routes'
 const WHITE_NAME_LIST = [LoginRoute.name, REDIRECT_NAME]
+console.log(basicRoutes)
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH as string),
   routes: (basicRoutes as unknown) as RouteRecordRaw[],
