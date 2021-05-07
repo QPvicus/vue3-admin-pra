@@ -7,6 +7,8 @@ export const LOCK_INFO_KEY = 'LOCK_INFO_KEY__'
 export const PRO_CFG_KEY = 'PRO_CFG_KEY__'
 export const MULTIPLE_TABS_KEY = 'MULTIPLE_TABS_KEY__'
 
+export const APP_DARK_MODE_KEY = '__APP_DARK_MODE__'
+
 // base global local key
 export const APP_LOCAL_CACHE_KEY = 'COMMON_LOCAL_KEY__'
 

@@ -5,6 +5,9 @@ declare type ReadonlyRecordable<T = any> = {
 }
 
 declare type Nullable<T> = T | null
+declare type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
 declare interface ViteEnv {
   VITE_PORT: number
   VITE_USE_MOCK: boolean

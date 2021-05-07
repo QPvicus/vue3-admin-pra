@@ -36,6 +36,26 @@ export interface GlobEnvConfig {
 }
 
 export interface ProjectConfig {
+  // storage location of permission related information
   permissionCacheTpe: CacheTypeEnum
+  //  use error handler plugin
   useErrorHandler: boolean
+
+  //  Whether to show configuration switch button
+  showSettingButton: boolean
+
+  // Whether to show show the theme switch button
+  showDarkModeToggle: boolean
+
+  // menuSetting
+  menuSetting: MenuSetting
+
+  // theme color
+  themeColor: string
+}
+
+export interface MenuSetting {
+  bgColor: string
+  fixed: boolean
+  collapsed: boolean
 }

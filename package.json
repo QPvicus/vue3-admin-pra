@@ -4,7 +4,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "clean:lib": "rimraf node_modules",
+    "clean:cache": "rimraf node_modules/.cache/ && rimraf node_modules/.vite",
+    "bootstrap": "yarn install"
   },
   "dependencies": {
     "@iconify/iconify": "^1.0.7",
@@ -18,7 +21,7 @@
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",
     "path-to-regexp": "^6.2.0",
-    "pinia": "^2.0.0-alpha.13",
+    "pinia": "^2.0.0-alpha.16",
     "qrcode": "^1.4.4",
     "vditor": "^3.8.3",
     "vue": "^3.0.11",
@@ -54,6 +57,7 @@
     "less": "^4.1.1",
     "postcss": "^8.2.8",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "stylelint": "^13.12.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^21.0.0",
