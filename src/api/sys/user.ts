@@ -10,6 +10,7 @@ import { ErrorMessageMode } from '/@/utils/http/axios/type'
 enum Api {
   Login = '/login',
   GetUserInfoById = '/GetUserInfoById',
+  GetPermCodeListById = '/GetPermCodeListById',
 }
 
 export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
@@ -27,6 +28,13 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 export function getUserInfoById(params: getUserInfoByIdParams) {
   return defHttp.get<GetUserInfoByUserIdModel>({
     url: Api.GetUserInfoById,
+    params,
+  })
+}
+
+export function getPermCodeListById(params: getUserInfoByIdParams) {
+  return defHttp.get<string[]>({
+    url: Api.GetPermCodeListById,
     params,
   })
 }

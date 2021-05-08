@@ -1,4 +1,4 @@
-import { ThemeEnum } from '/@/enums/appEnums'
+import { PermissionModeEnum, ThemeEnum } from '/@/enums/appEnums'
 import { CacheTypeEnum } from '/@/enums/cacheEnum'
 import { MenuModeEnum, MenuTypeEnum, MixSidebarTriggerEnum, TriggerEnum } from '/@/enums/menuEnum'
 
@@ -57,6 +57,9 @@ export interface ProjectConfig {
 
   // Whether to show logo
   showLogo: boolean
+
+  //  permission mode
+  permissionMode: PermissionModeEnum
 }
 
 export interface MenuSetting {
