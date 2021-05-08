@@ -75,6 +75,7 @@ export interface Menu {
 }
 
 export interface MenuModule {
+  //  order number smaller the fronter this is
   orderNo?: number
   menu: Menu
 }
