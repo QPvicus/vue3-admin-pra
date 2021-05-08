@@ -1,4 +1,6 @@
+import { ThemeEnum } from '/@/enums/appEnums'
 import { CacheTypeEnum } from '/@/enums/cacheEnum'
+import { MenuModeEnum, MenuTypeEnum, MixSidebarTriggerEnum, TriggerEnum } from '/@/enums/menuEnum'
 
 export type LocaleType = 'zh_CN' | 'en'
 
@@ -52,10 +54,28 @@ export interface ProjectConfig {
 
   // theme color
   themeColor: string
+
+  // Whether to show logo
+  showLogo: boolean
 }
 
 export interface MenuSetting {
   bgColor: string
   fixed: boolean
   collapsed: boolean
+  canDrag: boolean // ?
+  show: boolean
+  hidden: boolean
+  split: boolean
+  menuWidth: number
+  mode: MenuModeEnum
+  type: MenuTypeEnum
+  theme: ThemeEnum
+  topMenuAlign: 'start' | 'center' | 'end'
+  trigger: TriggerEnum
+  accordion: boolean
+  closeMixSidebarOnChange: boolean
+  collapsedShowTitle: boolean
+  mixSideTrigger: MixSidebarTriggerEnum
+  mixSideFixed: boolean
 }

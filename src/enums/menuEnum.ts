@@ -28,3 +28,9 @@ export enum MixSidebarTriggerEnum {
   HOVER = 'hover',
   CLICK = 'click',
 }
+
+export enum MenuSplitTypeEnum {
+  NONE,
+  TOP,
+  LEFT,
+}

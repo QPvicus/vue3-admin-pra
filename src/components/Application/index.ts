@@ -1,3 +1,3 @@
 import AppProvider from './src/AppProvider.vue'
-
-export { AppProvider }
+import AppLogo from './src/AppLogo.vue'
+export { AppProvider, AppLogo }

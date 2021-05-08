@@ -55,4 +55,23 @@ export interface AppRouteRecordRaw extends _RouteRecordRaw {
   fullPath?: string
 }
 
+export interface MenuTag {
+  type?: 'success' | 'error' | 'warn' | 'primary'
+  content?: string
+  dot?: boolean
+}
+
+export interface Menu {
+  name: string
+  icon?: string
+  path: string
+  disabled?: boolean
+  children: Menu[]
+  orderNo?: number
+  roles?: RoleEnum[]
+  meta?: Partial<RouteMeta>
+  tag?: MenuTag
+  hideMenu?: boolean
+}
+
 export type AppRouteModule = AppRouteRecordRaw
