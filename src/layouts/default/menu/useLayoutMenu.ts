@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { MenuSplitTypeEnum } from '/@/enums/menuEnum'
 import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
 import { useAppInject } from '/@/hooks/web/useAppInject'
-import { getCurrentParentPath } from '/@/router/menus'
+import { getChildrenMenus, getCurrentParentPath, getMenus, getShallowMenus } from '/@/router/menus'
 import { Menu } from '/@/router/types'
 import { usePermission } from '/@/store/modules/permission'
 
@@ -44,10 +44,30 @@ export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
       if (!parentPath) {
         parentPath = await getCurrentParentPath(currentActiveMenu)
       }
-      // parentPath &&
+      parentPath && throttleHandleSplitLeftMenu(parentPath)
     },
     {
       immediate: true,
+    }
+  )
+
+  // Menu Change
+  watch(
+    [() => permissionStore.getLastBuildMenuTime, () => permissionStore.getBackMenuList],
+    () => {
+      genMenus()
+    },
+    {
+      immediate: true,
+    }
+  )
+
+  // split Menu changes
+  watch(
+    () => getSplit.value,
+    () => {
+      if (unref(splitNotLeft)) return
+      genMenus()
     }
   )
 
@@ -56,6 +76,32 @@ export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
     if (unref(getSplitLeft) || unref(getIsMobile)) return
 
     //  split mode left
+    const children = await getChildrenMenus(parentPath)
+
+    if (!children || !children.length) {
+      setMenuSetting({ hidden: true })
+      menusRef.value = []
+      return
+    }
+
+    setMenuSetting({ hidden: false })
+    menusRef.value = children
+  }
+
+  //  get Menus
+  async function genMenus() {
+    //  normalType
+    if (unref(normalType) || unref(getIsMobile)) {
+      menusRef.value = await getMenus()
+      return
+    }
+
+    //  split-top
+    if (unref(getSplitTop)) {
+      const shallowMenuList = await getShallowMenus()
+      menusRef.value = shallowMenuList
+      return
+    }
   }
 
   return { menusRef }

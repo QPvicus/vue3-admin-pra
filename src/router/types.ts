@@ -66,7 +66,7 @@ export interface Menu {
   icon?: string
   path: string
   disabled?: boolean
-  children: Menu[]
+  children?: Menu[]
   orderNo?: number
   roles?: RoleEnum[]
   meta?: Partial<RouteMeta>
