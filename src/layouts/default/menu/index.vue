@@ -1,5 +1,5 @@
 <script lang="tsx">
-  import { computed, CSSProperties, defineComponent, PropType, unref } from 'vue'
+  import { computed, CSSProperties, defineComponent, PropType, toRef, unref } from 'vue'
   import { MenuModeEnum, MenuSplitTypeEnum } from '/@/enums/menuEnum'
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
   import { useRootSetting } from '/@/hooks/setting/useRootSetting'
@@ -8,6 +8,9 @@
   import { useGo } from '/@/hooks/web/useGo'
   import { propTypes } from '/@/utils/propTypes'
   import { AppLogo } from '/@/components/Application'
+  import { useLayoutMenu } from './useLayoutMenu'
+  import { isUrl } from '/@/utils/is'
+  import { openWindow } from '/@/utils'
   export default defineComponent({
     name: 'LayoutMenu',
     props: {
@@ -39,6 +42,7 @@
       const { getShowLogo } = useRootSetting()
       const { getIsMobile } = useAppInject()
       const { prefixCls } = useDesign('layout-menu')
+      const { menusRef } = useLayoutMenu(toRef(props, 'splitType'))
       const getComputedMenuMode = computed(() => {
         return unref(getIsMobile) ? MenuModeEnum.INLINE : props.menuMode || unref(getMenuMode)
       })
@@ -78,12 +82,28 @@
         ]
       })
 
-      // const getCommonProps = () => {
-
-      // }
+      const getCommonProps = computed(() => {
+        const menus = unref(menusRef)
+        return {
+          menus,
+          beforeClickFn: beforeMenuClickFn,
+          items: menus,
+          theme: unref(getComputedMenuTheme),
+          accordion: unref(getAccordion),
+          collapse: unref(getCollapsed),
+          collapseShowTitle: unref(getCollapsedShowTitle),
+          onMenuClick: handleMenuClick,
+        }
+      })
       //  go menu
       function handleMenuClick(path: string) {
         go(path)
+      }
+
+      async function beforeMenuClickFn(path: string) {
+        if (!isUrl(path)) return true
+        openWindow(path)
+        return false
       }
 
       function renderHeader() {
@@ -95,6 +115,12 @@
             theme={unref(getComputedMenuTheme)}
           />
         )
+      }
+
+      function renderMenu() {
+        const { menus, ...menuProps } = unref(getCommonProps)
+        if (!menus || !menus.length) return null
+        return null
       }
       return () => {
         return <>{renderHeader()}</>
