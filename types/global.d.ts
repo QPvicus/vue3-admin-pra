@@ -8,6 +8,9 @@ declare type Nullable<T> = T | null
 declare type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>
 }
+
+declare type TimeoutHandler = ReturnType<typeof setTimeout>
+declare type IntervalHandler = ReturnType<typeof setInterval>
 declare interface ViteEnv {
   VITE_PORT: number
   VITE_USE_MOCK: boolean
