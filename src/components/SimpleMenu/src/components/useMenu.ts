@@ -1,6 +1,6 @@
 import { ComponentInternalInstance, computed, CSSProperties, unref } from 'vue'
 
-export function useMenuItem(instance: ComponentInternalInstance | null) {
+export function useMenu(instance: ComponentInternalInstance | null) {
   const getParentMenu = computed(() => {
     return findParentMenu(['Menu', 'SubMenu'])
   })
@@ -52,7 +52,7 @@ export function useMenuItem(instance: ComponentInternalInstance | null) {
         list: [],
       }
     }
-    const ret: any[] = []
+    const ret: ComponentInternalInstance[] = []
     while (parent && parent.type.name !== 'Menu') {
       if (parent.type.name === 'SubMenu') {
         ret.push(parent)

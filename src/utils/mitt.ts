@@ -33,6 +33,7 @@ export default class Mitt {
   off(type: string | Symbol, handler: Fn) {
     const handlers = this.cache?.get(type)
     if (handlers) {
+      // if  indexOf return -1 =>  -1 >>> 0 => 4000000多 => return []
       handlers.splice(handlers.indexOf(handler) >>> 0, 1)
     }
   }
