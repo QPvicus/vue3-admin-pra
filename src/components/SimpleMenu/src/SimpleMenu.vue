@@ -60,7 +60,7 @@
         activeSubMenuNames: [],
       })
       const { currentRoute } = useRouter()
-      const { prefixCls } = useDesign('menu-simple')
+      const { prefixCls } = useDesign('simple-menu')
 
       const { items, accordion, collapse, mixSider } = toRefs(props)
       const { setOpenKeys, getOpenKeys } = useOpenKeys(

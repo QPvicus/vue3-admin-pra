@@ -18,6 +18,7 @@ export interface RouteMeta {
   frameSrc?: string
   transitionName?: string
   hideBreadcrumb?: boolean
+  //  hide SubMenu
   hideChildrenMenu?: boolean
   carryParam?: boolean
   single?: boolean
