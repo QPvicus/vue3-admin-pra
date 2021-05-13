@@ -19,6 +19,7 @@
     "axios": "^0.21.1",
     "crypto-js": "^4.0.0",
     "echarts": "^5.0.2",
+    "eslint-define-config": "^1.0.8",
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",
     "path-to-regexp": "^6.2.0",

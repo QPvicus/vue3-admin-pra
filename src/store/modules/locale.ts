@@ -17,7 +17,7 @@ export const useLocaleStore = defineStore({
     localeInfo: lsLocaleSetting,
   }),
   getters: {
-    getShowPicker() {
+    getShowPicker(): boolean {
       return !!this.localeInfo?.showPicker
     },
     getLocale(): LocaleType {

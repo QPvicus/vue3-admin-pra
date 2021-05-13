@@ -4,12 +4,12 @@
  */
 
 export default class Mitt {
-  private cache: Map<string | Symbol, Array<(...data: any) => void>>
+  private cache: Map<string | symbol, Array<(...data: any) => void>>
   constructor(all = []) {
     this.cache = new Map(all)
   }
 
-  once(type: string | Symbol, handler: Fn) {
+  once(type: string | symbol, handler: Fn) {
     const decor = (...args: any[]) => {
       handler && handler.apply(this, args)
       this.off(type, decor)
@@ -18,7 +18,7 @@ export default class Mitt {
     return this
   }
 
-  on(type: string | Symbol, handler: Fn) {
+  on(type: string | symbol, handler: Fn) {
     const handlers = this.cache?.get(type)
     const added = handlers && handlers.push(handler)
     if (!added) {
@@ -30,7 +30,7 @@ export default class Mitt {
    * @param type
    * @param handler
    */
-  off(type: string | Symbol, handler: Fn) {
+  off(type: string | symbol, handler: Fn): void {
     const handlers = this.cache?.get(type)
     if (handlers) {
       // if  indexOf return -1 =>  -1 >>> 0 => 4000000多 => return []
@@ -38,7 +38,7 @@ export default class Mitt {
     }
   }
 
-  emit(type: string | Symbol, event?: any) {
+  emit(type: string | symbol, event?: any) {
     for (const handler of this.cache.get(type) || [].slice()) handler(event)
     for (const handler of this.cache.get('*') || [].slice()) handler(type, event)
   }

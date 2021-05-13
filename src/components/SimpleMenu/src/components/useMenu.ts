@@ -67,7 +67,7 @@ export function useMenu(instance: ComponentInternalInstance | null) {
   }
 
   function getParentInstance(instance: ComponentInternalInstance, name = 'SubMenu') {
-    let parent = instance.parent
+    const parent = instance.parent
     while (parent) {
       if (parent.type.name !== name) {
         return parent

@@ -27,13 +27,12 @@ export interface RouteMeta {
   isLink?: boolean
 }
 
-interface _RouteRecordRaw
-  extends Omit<
-    {
-      [key in keyof RouteRecordRaw]: RouteRecordRaw[key]
-    },
-    'meta'
-  > {}
+type _RouteRecordRaw = Omit<
+  {
+    [key in keyof RouteRecordRaw]: RouteRecordRaw[key]
+  },
+  'meta'
+>
 // @ts-ignore
 // export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
 //   name: string

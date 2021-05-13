@@ -1,7 +1,12 @@
 <template>
   <AInput v-bind="$attrs" :class="prefixCls" :size="size" :value="value">
     <template #addonAfter>
-      <CountDownButton :size="size" :count="count" :value="state" :beforeStartFunc="sendCodeApi" />
+      <CountDownButton
+        :size="size"
+        :count="count"
+        :value="state"
+        :before-start-func="sendCodeApi"
+      />
     </template>
   </AInput>
 </template>

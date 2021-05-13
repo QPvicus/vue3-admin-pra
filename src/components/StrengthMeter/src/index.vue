@@ -6,7 +6,7 @@
       :value="innerValueRef"
       v-bind="$attrs"
       :disabled="disabled"
-      allowClear
+      allow-clear
     >
       <template #[item]="data" v-for="item in Object.keys($slots)">
         <slot :name="item" v-bind="data"></slot>

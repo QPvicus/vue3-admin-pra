@@ -21,8 +21,6 @@ export type Result<T = any> = {
   result: T
 }
 
-
-
 export interface UploadFileParams {
   data?: Recordable
   name?: string

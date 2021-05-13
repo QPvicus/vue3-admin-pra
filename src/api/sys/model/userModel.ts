@@ -1,5 +1,3 @@
-import { RoleEnum } from '/@/enums/roleEnum'
-
 /**
  *  @description Login interface parameter
  */
