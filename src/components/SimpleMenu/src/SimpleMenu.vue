@@ -1,16 +1,31 @@
 <template>
-  <Menu v-bind="getBindValue" />
+  <Menu
+    v-bind="getBindValue"
+    :activeName="activeName"
+    :openNames="getOpenKeys"
+    :class="prefixCls"
+    :activeSubMenuNames="activeSubMenuNames"
+    @select="handleSelect"
+  >
+    <template v-for="item in items" :key="item.path">
+      {{ 'aa' }}
+    </template>
+  </Menu>
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
+  import { computed, defineComponent, PropType, reactive, ref, toRefs, unref, watch } from 'vue'
   import Menu from './components/Menu.vue'
   import type { Menu as MenuType } from '/@/router/types'
   import { propTypes } from '/@/utils/propTypes'
   import type { MenuState } from './types'
-  import { useRouter } from 'node_modules/vue-router/dist/vue-router'
+  import { RouteLocationNormalizedLoaded, useRouter } from 'vue-router'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { useOpenKeys } from './useOpenKeys'
+  import { listenerRouteChange } from '/@/logics/mitt/routeChange'
+  import { REDIRECT_NAME } from '/@/router/constant'
+  import { isFunction, isUrl } from '/@/utils/is'
+  import { openWindow } from '/@/utils'
 
   export default defineComponent({
     name: 'SimoleMenu',
@@ -19,7 +34,7 @@
     },
     inheritAttrs: false,
     props: {
-      item: {
+      items: {
         type: Array as PropType<MenuType[]>,
         default: () => [],
       },
@@ -33,8 +48,11 @@
       },
       isSplitMenu: propTypes.bool,
     },
-    setup(props, { attrs }) {
+    emits: ['menuClick'],
+    setup(props, { attrs, emit }) {
       const curretnActiveMenu = ref('')
+      const isClickGo = ref(false)
+
       const getBindValue = computed(() => ({ ...props, ...attrs }))
       const menuState = reactive<MenuState>({
         activeName: '',
@@ -44,10 +62,10 @@
       const { currentRoute } = useRouter()
       const { prefixCls } = useDesign('menu-simple')
 
-      const { item, accordion, collapse, mixSider } = toRefs(props)
+      const { items, accordion, collapse, mixSider } = toRefs(props)
       const { setOpenKeys, getOpenKeys } = useOpenKeys(
         menuState,
-        item,
+        items,
         accordion,
         mixSider,
         collapse
@@ -68,7 +86,7 @@
       )
 
       watch(
-        () => props.item,
+        () => props.items,
         () => {
           if (!props.isSplitMenu) {
             return
@@ -80,8 +98,51 @@
         }
       )
 
+      listenerRouteChange((route) => {
+        if (route.path === REDIRECT_NAME) return
+
+        curretnActiveMenu.value = route.meta?.curretnActiveMenu as string
+        handleMenuChange(route)
+
+        if (unref(curretnActiveMenu)) {
+          menuState.activeName = unref(curretnActiveMenu)
+          setOpenKeys(unref(curretnActiveMenu))
+        }
+      })
+
+      async function handleMenuChange(route?: RouteLocationNormalizedLoaded) {
+        if (unref(isClickGo)) {
+          isClickGo.value = false
+          return
+        }
+
+        const path = (route || unref(currentRoute)).path
+        menuState.activeName = path
+
+        setOpenKeys(path)
+      }
+
+      async function handleSelect(key: string) {
+        if (isUrl(key)) {
+          openWindow(key)
+          return
+        }
+        const { beforeClickFn } = props
+        if (beforeClickFn && isFunction(beforeClickFn)) {
+          const flag = await beforeClickFn(key)
+          if (!flag) return
+        }
+        emit('menuClick', key)
+        isClickGo.value = true
+        setOpenKeys(key)
+        menuState.activeName = key
+      }
       return {
+        prefixCls,
         getBindValue,
+        handleSelect,
+        getOpenKeys,
+        ...toRefs(menuState),
       }
     },
   })
