@@ -5,6 +5,8 @@ if (import.meta.env.DEV) {
   import('ant-design-vue/dist/antd.less')
 }
 
+import 'vite-plugin-svg-icons/register'
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router, { setRouter } from '/@/router'

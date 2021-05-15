@@ -51,5 +51,8 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       __VUE_I18N_FULL_INSTALL__: false,
       __INTLIFY_PROD_DEVTOOLS__: false,
     },
+    optimizeDeps: {
+      exclude: ['vue-demi'],
+    },
   }
 }

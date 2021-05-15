@@ -2,6 +2,7 @@ import { configWindiCssPlugin } from './windicss'
 import { styleImportPlugins } from './styleImport'
 import { configHmrPlugin } from './hmr'
 import { configHtmlPlugin } from './html'
+import { configSvgIconsPlugin } from './svgSprite'
 import type { Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -20,6 +21,9 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   // vite-plugin-styleImport
   vitePlugins.push(styleImportPlugins())
+
+  // vite-plugin-svgSprite
+  vitePlugins.push(configSvgIconsPlugin(isBuild))
 
   // vite-plugin-mock
   VITE_USE_MOCK && vitePlugins.push(configMockPlugin(isBuild))
