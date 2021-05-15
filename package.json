@@ -7,11 +7,11 @@
     "serve": "vite preview",
     "clean:lib": "rimraf node_modules",
     "clean:cache": "rimraf node_modules/.cache/ && rimraf node_modules/.vite",
-    "bootstrap": "yarn install",
+    "bootstrap": "yarn",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm run bootstrap"
   },
   "dependencies": {
-    "@iconify/iconify": "^1.0.7",
+    "@iconify/iconify": "^2.0.1",
     "@vueuse/core": "^4.4.1",
     "@zxcvbn-ts/core": "^0.3.0",
     "ant-design-vue": "^2.1.2",

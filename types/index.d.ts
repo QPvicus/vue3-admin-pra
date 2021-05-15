@@ -3,3 +3,5 @@ declare interface Fn<T = any, R = T> {
 }
 
 declare type TargetContext = '_blank' | '_self'
+
+declare type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>
