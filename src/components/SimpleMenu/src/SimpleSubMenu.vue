@@ -4,20 +4,58 @@
     v-if="!menuHasChildren(item) && getShowMenu"
     v-bind="$props"
     :class="getLevelClass"
-  />
+  >
+    <Icon v-if="getIcon" :icon="getIcon" :szie="16" />
+    <div v-if="collapseShowTitle && getIsCollapseParent" class="mt-1 collapse-title">
+      {{ getI18nName }}
+    </div>
+    <template #title>
+      <span :class="['ml-2', `${prefixCls}-sub-title`]">
+        {{ getI18nName }}
+      </span>
+      <SimpleMenuTag :item="item" :collapseParent="getIsCollapseParent" />
+    </template>
+  </MenuItem>
+  <SubMenu
+    :name="item"
+    v-if="menuHasChildren(item) && getShowMenu"
+    :class="[getLevelClass, theme]"
+    :collapseShowTitle="collapseShowTitle"
+  >
+    <template #title>
+      <Icon v-if="getIcon" :icon="getIcon" :size="16" />
+
+      <div v-if="collapseShowTitle && getIsCollapseParent" class="mt-2 collapse-title">
+        {{ getI18nName }}
+      </div>
+      <span v-show="getShowSubTitle" :class="['mt-2', `${prefixCls}-sub-title`]">
+        {{ getI18nName }}
+      </span>
+      <SimpleMenuTag :item="item" :collapseParent="!!collapse && !!parent" />
+    </template>
+    <template v-for="childrenItem in item.children || []" :key="childrenItem.path">
+      <SimpleSubMenu v-bind="$props" :item="childrenItem" :parent="false" />
+    </template>
+  </SubMenu>
 </template>
 
 <script lang="ts">
   import { computed, defineComponent, PropType } from 'vue'
   import MenuItem from './components/MenuItem.vue'
+  import SubMenu from './components/SubMenuItem.vue'
   import { useDesign } from '/@/hooks/web/useDesign'
   // import { useI18n } from '/@/hooks/web/usei18n'
   import { Menu } from '/@/router/types'
   import { propTypes } from '/@/utils/propTypes'
+  import Icon from '/@/components/Icon'
+  import SimpleMenuTag from './SimpleMenuTag.vue'
   export default defineComponent({
     name: 'SimpleSubMenu',
     components: {
       MenuItem,
+      Icon,
+      SimpleMenuTag,
+      SubMenu,
     },
     props: {
       item: {

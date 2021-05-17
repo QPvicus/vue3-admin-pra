@@ -17,7 +17,7 @@
     </template>
     <Popover
       placement="right"
-      :overlayClassName="`${prefixCls}-menu-poper`"
+      :overlayClassName="`${prefixCls}-menu-popover`"
       v-else
       :visible="getIsOpend"
       @visibleChange="handleVisibleChange"
