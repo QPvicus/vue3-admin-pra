@@ -8,7 +8,12 @@
     @select="handleSelect"
   >
     <template v-for="item in items" :key="item.path">
-      {{ 'aa' }}
+      <SimpleSubMenu
+        :item="item"
+        :parent="true"
+        :collapse="collapse"
+        :collapseShowTitle="collapseShowTitle"
+      />
     </template>
   </Menu>
 </template>
@@ -16,6 +21,7 @@
 <script lang="ts">
   import { computed, defineComponent, PropType, reactive, ref, toRefs, unref, watch } from 'vue'
   import Menu from './components/Menu.vue'
+  import SimpleSubMenu from './SimpleSubMenu.vue'
   import type { Menu as MenuType } from '/@/router/types'
   import { propTypes } from '/@/utils/propTypes'
   import type { MenuState } from './types'
@@ -31,6 +37,7 @@
     name: 'SimoleMenu',
     components: {
       Menu,
+      SimpleSubMenu,
     },
     inheritAttrs: false,
     props: {
