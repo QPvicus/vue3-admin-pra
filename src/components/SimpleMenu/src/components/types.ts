@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import { Ref } from 'vue'
 
 export interface Props {
   theme: string
@@ -18,8 +18,8 @@ export interface SubMenuProvider {
   removeAll: () => void
   sliceIndex: (index: number) => void
   isRemoveAllPopup: Ref<boolean>
-  getOpenNames: () => string[]
-  handleMouseLeave?: Fn
+  getOpenNames: () => (string | number)[]
+  handleMouseleave?: Fn
   level: number
   props: Props
 }
