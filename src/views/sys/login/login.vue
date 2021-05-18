@@ -93,7 +93,32 @@
   @logo-prefix-cls: ~'@{namespace}-app-logo';
   @countdown-prefix-cls: ~'@{namespace}-countdown-input';
   @dark-bg: #293146;
+  html[data-theme='dark'] {
+    .@{prefix-cls} {
+      background-color: @dark-bg;
 
+      &::before {
+        background-image: url(/@/assets/svg/login-bg-dark.svg);
+      }
+
+      .ant-input,
+      .ant-input-password {
+        background-color: #232a3b;
+      }
+
+      .ant-btn:not(.ant-btn-link):not(.ant-btn-primary) {
+        border: 1px solid #4a5569;
+      }
+
+      &-form {
+        background: transparent !important;
+      }
+
+      .app-iconify {
+        color: #fff;
+      }
+    }
+  }
   .@{prefix-cls} {
     overflow: hidden;
     @media (max-width: @screen-xl) {

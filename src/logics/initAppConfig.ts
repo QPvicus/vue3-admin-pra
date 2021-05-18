@@ -53,8 +53,8 @@ export function initAppConfig() {
 export function clearObsoleteStorage() {
   const commonPrefix = getCommonStoragePrefix()
   const shortPrefix = getStorageShortName()
-  console.log(commonPrefix, 'commonPrefix')
-  console.log(shortPrefix, 'shortPrefix')
+  // VUE_VBEN_ADMIN__DEVELOPMENT
+  // VUE_VBEN_ADMIN__DEVELOPMENT__1.0.0
   ;[localStorage, sessionStorage].forEach((item: Storage) => {
     Object.keys(item).forEach((key) => {
       if (key && key.startsWith(commonPrefix) && !key.startsWith(shortPrefix)) {

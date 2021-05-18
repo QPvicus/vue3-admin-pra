@@ -8,7 +8,7 @@ const WHITE_NAME_LIST = [LoginRoute.name, REDIRECT_NAME]
 console.log(basicRoutes)
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH as string),
-  routes: (basicRoutes as unknown) as RouteRecordRaw[],
+  routes: basicRoutes as unknown as RouteRecordRaw[],
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })

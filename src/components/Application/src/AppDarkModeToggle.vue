@@ -60,7 +60,7 @@
     position: relative;
     display: flex;
     width: 50px;
-    height: 20px;
+    height: 26px;
     padding: 0 6px;
     margin-left: auto;
     cursor: pointer;
