@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
@@ -10,6 +10,17 @@
     <title><%- title %></title>
   </head>
   <body>
+    <script>
+      ;(() => {
+        var htmlRoot = document.getElementById('htmlRoot')
+        //  theme = 'light' | 'dark'
+        var theme = window.localStorage.getItem('__APP__DARK__MODE__')
+        if (htmlRoot && theme) {
+          htmlRoot.setAttribute('data-theme', theme)
+          theme = htmlRoot = null
+        }
+      })()
+    </script>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

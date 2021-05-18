@@ -2,6 +2,7 @@ import { configWindiCssPlugin } from './windicss'
 import { styleImportPlugins } from './styleImport'
 import { configHmrPlugin } from './hmr'
 import { configHtmlPlugin } from './html'
+import { configThemePlugin } from './theme'
 import { configSvgIconsPlugin } from './svgSprite'
 import type { Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -32,6 +33,9 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   //  vite-plugin-purge-icons
   vitePlugins.push(PurgeIcons())
+
+  //  vite-plugin-theme
+  vitePlugins.push(configThemePlugin(isBuild))
 
   return vitePlugins
 }

@@ -1,5 +1,7 @@
 <template>
   <div :class="prefixCls" class="relative w-full h-full px-4">
+    <AppDarkModeToggle class="absolute top-4 right-4 enter-x text-white xl:text-gray-600" />
+
     <span class="-enter-x xl:hidden">
       <AppLogo :alwaysShowTitle="true" />
     </span>
@@ -21,7 +23,25 @@
         <div class="h-full xl:h-auto flex py-5 xl:py-0 xl:my-0 w-full xl:w-6/12">
           <div
             :class="`${prefixCls}-form`"
-            class="my-auto mx-auto xl:ml-20 xl:bg-transparent px-5 py-8 sm:px-8 xl:p-4 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto enter-x relative"
+            class="
+              my-auto
+              mx-auto
+              xl:ml-20
+              xl:bg-transparent
+              px-5
+              py-8
+              sm:px-8
+              xl:p-4
+              rounded-md
+              shadow-md
+              xl:shadow-none
+              w-full
+              sm:w-3/4
+              lg:w-2/4
+              xl:w-auto
+              enter-x
+              relative
+            "
           >
             <LoginForm />
             <ForgetPasswordForm />
@@ -43,6 +63,7 @@
   import RegisterForm from './RegisterForm.vue'
   import ForgetPasswordForm from './ForgetPasswordForm.vue'
   import AppLogo from '/@/components/Application/src/AppLogo.vue'
+  import { AppDarkModeToggle } from '/@/components/Application'
   import { useI18n } from '/@/hooks/web/usei18n'
   import { useDesign } from '/@/hooks/web/useDesign'
   export default defineComponent({
@@ -54,6 +75,7 @@
       QrCodeForm,
       RegisterForm,
       ForgetPasswordForm,
+      AppDarkModeToggle,
     },
     setup() {
       const { t } = useI18n()
