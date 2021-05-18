@@ -60,6 +60,10 @@ export interface ProjectConfig {
 
   //  permission mode
   permissionMode: PermissionModeEnum
+
+  colorWeek: boolean
+
+  grayMode: boolean
 }
 
 export interface MenuSetting {

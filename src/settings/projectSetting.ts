@@ -40,6 +40,10 @@ const setting: ProjectConfig = {
     mixSideTrigger: MixSidebarTriggerEnum.CLICK,
     mixSideFixed: false,
   },
+
+  grayMode: false,
+
+  colorWeek: false,
 }
 
 export default setting
