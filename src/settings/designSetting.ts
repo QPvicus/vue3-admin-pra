@@ -2,7 +2,7 @@ import { ThemeEnum } from '../enums/appEnums'
 
 export const prefixCls = 'vben'
 
-export const darkMode = ThemeEnum.DARK
+export const darkMode = ThemeEnum.LIGHT
 
 // sider preset color
 export const SIDE_BAR_BG_COLOR_LIST: string[] = [

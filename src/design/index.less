@@ -21,6 +21,15 @@ body {
   height: 100%;
   overflow: visible !important;
   overflow-x: hidden !important;
+
+  &.color-weak {
+    filter: invert(80%);
+  }
+
+  &.gray-mode {
+    filter: grayscale(100%);
+    filter: progid:dximagetransform.microsoft.basicimage(grayscale=1);
+  }
 }
 
 a:focus,
