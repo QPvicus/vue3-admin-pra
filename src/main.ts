@@ -15,6 +15,7 @@ import { setI18n } from './locales/setupi18n'
 import { initAppConfig } from '/@/logics/initAppConfig'
 console.log(import.meta.env)
 import { registerGlobComp } from '/@/components/registerGlobComp'
+import { setupRouterGuard } from './router/guard'
 ;(async () => {
   const app = createApp(App)
   setStore(app)
@@ -27,6 +28,8 @@ import { registerGlobComp } from '/@/components/registerGlobComp'
   // configure Routing
   setRouter(app)
 
+  //  setup router guard
+  setupRouterGuard()
   // Mount when router is ready
   await router.isReady()
   app.mount('#app')

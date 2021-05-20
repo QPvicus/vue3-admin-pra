@@ -1,5 +1,5 @@
 <template>
-  <h2>Exception Page</h2>
+  <h2 style="{{color: red}}">Exception Page</h2>
 </template>
 
 <script lang="ts">

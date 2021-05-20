@@ -1,8 +1,16 @@
 import { defineStore } from 'pinia'
+import { toRaw } from 'vue'
 import { store } from '..'
+import { useAppStoreWithOut } from './app'
+import { useUserStore } from './user'
 import { getPermCodeListById } from '/@/api/sys/user'
-import { Menu } from '/@/router/types'
-
+import { PermissionModeEnum } from '/@/enums/appEnums'
+import { useI18n } from '/@/hooks/web/usei18n'
+import { asyncRoutes } from '/@/router/routes'
+import { ERROR_LOG_ROUTE } from '/@/router/routes/basic'
+import { AppRouteRecordRaw, Menu } from '/@/router/types'
+import projectSetting from '/@/settings/projectSetting'
+import { filter } from '/@/utils/helper/treeHelper'
 interface PermissionState {
   permCodeList: string[]
   isDynamicAddedRoute: boolean
@@ -54,6 +62,34 @@ export const usePermission = defineStore({
     async changePermCodeList(userId: string) {
       const codeList = await getPermCodeListById({ userId })
       this.setPermCodeList(codeList)
+    },
+
+    async buildRoutesAction(id?: string | number) {
+      const { t } = useI18n()
+      const userStore = useUserStore()
+      const appStore = useAppStoreWithOut()
+      let routes: AppRouteRecordRaw[] = []
+      const roleList = toRaw(userStore.getRoleList)
+      const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig
+      if (permissionMode === PermissionModeEnum.ROLE) {
+        const routerFilter = (route: AppRouteRecordRaw) => {
+          const { meta } = route
+          const { roles } = meta || {}
+          if (!roles) {
+            return true
+          }
+          // 路由中的权限 要匹配  user中的 roleList
+          return roleList.some((role) => roles.includes(role))
+        }
+        routes = filter(asyncRoutes, routerFilter)
+        routes = routes.filter(routerFilter)
+      } else {
+        //  permissionMode === BACK
+        t(id as string)
+      }
+
+      routes.push(ERROR_LOG_ROUTE)
+      return routes
     },
   },
 })

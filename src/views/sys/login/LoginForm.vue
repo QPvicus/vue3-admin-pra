@@ -126,7 +126,6 @@
 
       async function handleLogin() {
         const data = await validate()
-        console.log(data)
         if (!data) return
         try {
           loading.value = true

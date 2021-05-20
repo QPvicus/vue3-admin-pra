@@ -1,6 +1,7 @@
 <template>
   <Layout :class="prefixCls">
     <LayoutHeader />
+    <router-view />
   </Layout>
 </template>
 
