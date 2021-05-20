@@ -21,14 +21,14 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
       try {
         realName = JSON.parse(realName)
       } catch (err) {
-        const arr = realName.split(',')
-        realName = {}
-        arr.forEach((item, index) => {
-          if (index % 2 === 0) {
-            realName[item] = arr[index + 1]
-          }
-        })
-        console.log(realName, 'realName')
+        // const arr = realName.split(',')
+        // realName = {}
+        // arr.forEach((item, index) => {
+        //   if (index % 2 === 0) {
+        //     realName[item] = arr[index + 1]
+        //   }
+        // })
+        // console.log(realName, 'realName')
       }
     }
     ret[envName] = realName

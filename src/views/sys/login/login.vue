@@ -1,6 +1,11 @@
 <template>
   <div :class="prefixCls" class="relative w-full h-full px-4">
-    <AppDarkModeToggle class="absolute top-4 right-4 enter-x text-white xl:text-gray-600" />
+    <AppLocalePicker
+      :showText="false"
+      class="absolute top-4 right-4 enter-x text-white xl:text-gray-600"
+    />
+
+    <AppDarkModeToggle class="absolute top-3 right-7 enter-x" />
 
     <span class="-enter-x xl:hidden">
       <AppLogo :alwaysShowTitle="true" />
@@ -63,7 +68,7 @@
   import RegisterForm from './RegisterForm.vue'
   import ForgetPasswordForm from './ForgetPasswordForm.vue'
   import AppLogo from '/@/components/Application/src/AppLogo.vue'
-  import { AppDarkModeToggle } from '/@/components/Application'
+  import { AppDarkModeToggle, AppLocalePicker } from '/@/components/Application'
   import { useI18n } from '/@/hooks/web/usei18n'
   import { useDesign } from '/@/hooks/web/useDesign'
   export default defineComponent({
@@ -76,6 +81,7 @@
       RegisterForm,
       ForgetPasswordForm,
       AppDarkModeToggle,
+      AppLocalePicker,
     },
     setup() {
       const { t } = useI18n()
