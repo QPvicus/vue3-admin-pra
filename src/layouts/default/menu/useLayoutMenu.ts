@@ -1,15 +1,19 @@
-import { useThrottleFn } from '@vueuse/shared'
-import { computed, ref, Ref, unref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { MenuSplitTypeEnum } from '/@/enums/menuEnum'
-import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
-import { useAppInject } from '/@/hooks/web/useAppInject'
-import { getChildrenMenus, getCurrentParentPath, getMenus, getShallowMenus } from '/@/router/menus'
-import { Menu } from '/@/router/types'
-import { usePermission } from '/@/store/modules/permission'
+import type { Menu } from '/@/router/types'
+import type { Ref } from 'vue'
 
-export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
-  //  Menu array
+import { watch, unref, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { MenuSplitTypeEnum } from '/@/enums/menuEnum'
+import { useThrottleFn } from '@vueuse/core'
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
+
+import { getChildrenMenus, getCurrentParentPath, getMenus, getShallowMenus } from '/@/router/menus'
+import { usePermission } from '/@/store/modules/permission'
+import { useAppInject } from '/@/hooks/web/useAppInject'
+
+export function useSplitMenu(splitType: Ref<MenuSplitTypeEnum>) {
+  // Menu array
   const menusRef = ref<Menu[]>([])
   const { currentRoute } = useRouter()
   const { getIsMobile } = useAppInject()
@@ -18,16 +22,15 @@ export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
 
   const throttleHandleSplitLeftMenu = useThrottleFn(handleSplitLeftMenu, 50)
 
-  //  not left and not horizontal
-  const splitNotLeft = computed(() => {
-    return unref(splitType) !== MenuSplitTypeEnum.LEFT && !unref(getIsHorizontal)
-  })
-
-  const getSplitLeft = computed(
-    () => !unref(splitType) || unref(splitType) !== MenuSplitTypeEnum.LEFT
+  const splitNotLeft = computed(
+    () => unref(splitType) !== MenuSplitTypeEnum.LEFT && !unref(getIsHorizontal)
   )
 
-  const getSplitTop = computed(() => unref(splitType) === MenuSplitTypeEnum.TOP)
+  const getSplitLeft = computed(
+    () => !unref(getSplit) || unref(splitType) !== MenuSplitTypeEnum.LEFT
+  )
+
+  const getSpiltTop = computed(() => unref(splitType) === MenuSplitTypeEnum.TOP)
 
   const normalType = computed(() => {
     return unref(splitType) === MenuSplitTypeEnum.NONE || !unref(getSplit)
@@ -51,7 +54,7 @@ export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
     }
   )
 
-  // Menu Change
+  // Menu changes
   watch(
     [() => permissionStore.getLastBuildMenuTime, () => permissionStore.getBackMenuList],
     () => {
@@ -71,11 +74,11 @@ export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
     }
   )
 
-  //  split left menu
+  // Handle left menu split
   async function handleSplitLeftMenu(parentPath: string) {
     if (unref(getSplitLeft) || unref(getIsMobile)) return
 
-    //  split mode left
+    // spilt mode left
     const children = await getChildrenMenus(parentPath)
 
     if (!children || !children.length) {
@@ -88,18 +91,19 @@ export function useLayoutMenu(splitType: Ref<MenuSplitTypeEnum>) {
     menusRef.value = children
   }
 
-  //  get Menus
+  // get menus
   async function genMenus() {
-    //  normalType
+    // normal mode
     if (unref(normalType) || unref(getIsMobile)) {
       menusRef.value = await getMenus()
       return
     }
 
-    //  split-top
-    if (unref(getSplitTop)) {
-      const shallowMenuList = await getShallowMenus()
-      menusRef.value = shallowMenuList
+    // split-top
+    if (unref(getSpiltTop)) {
+      const shallowMenus = await getShallowMenus()
+
+      menusRef.value = shallowMenus
       return
     }
   }

@@ -1,4 +1,4 @@
-import { getAllParentPath } from '../helper/menuHelper'
+import { getAllParentPath, transformMenuModule } from '../helper/menuHelper'
 import { PermissionModeEnum } from '/@/enums/appEnums'
 import type { Menu, MenuModule } from '/@/router/types'
 import { useAppStoreWithOut } from '/@/store/modules/app'
@@ -25,6 +25,14 @@ const isBackMode = () => {
 }
 
 const staticMenus: Menu[] = []
+;(() => {
+  menuModules.sort((a, b) => {
+    return (a.orderNo || 0) - (b.orderNo || 0)
+  })
+  for (const menu of menuModules) {
+    staticMenus.push(transformMenuModule(menu))
+  }
+})()
 
 async function getAsyncMenus() {
   const permissionStore = usePermission()
@@ -55,7 +63,7 @@ export async function getShallowMenus(): Promise<Menu[]> {
 export async function getChildrenMenus(parentPath: string) {
   const menus = await getMenus()
   const parent = menus.find((item) => item.path === parentPath)
-  if (!parent || !parent.children || !!parent.meta?.hideChildrenMenu) return [] as Menu[]
+  if (!parent || !parent.children || !!parent.meta?.hideChildrenInMenu) return [] as Menu[]
   const routes = router.getRoutes()
   return !isBackMode() ? filter(parent.children, basicFilter(routes)) : parent.children
 }

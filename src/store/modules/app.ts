@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { store } from '..'
 
-import type { ProjectConfig } from '/#/config'
+import type { MenuSetting, ProjectConfig } from '/#/config'
 import { ThemeEnum } from '/@/enums/appEnums'
 import { APP_DARK_MODE_KEY, PRO_CFG_KEY } from '/@/enums/cacheEnum'
 import { darkMode } from '/@/settings/designSetting'
@@ -34,8 +34,8 @@ export const useAppStore = defineStore({
     getProjectConfig(): ProjectConfig {
       return this.projectSetting || ({} as ProjectConfig)
     },
-    getMenuSetting() {
-      return this.getProjectConfig().menuSetting
+    getMenuSetting(): MenuSetting {
+      return this.getProjectConfig.menuSetting
     },
   },
   actions: {

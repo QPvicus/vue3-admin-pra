@@ -10,10 +10,10 @@ export interface SimpleRootMenuContextProps {
 
 const key: InjectionKey<SimpleRootMenuContextProps> = Symbol()
 
-export function createSimpleMenuContext(context: SimpleRootMenuContextProps) {
+export function createSimpleRootMenuContext(context: SimpleRootMenuContextProps) {
   return createContext(context, key, { readonly: false, native: true })
 }
 
-export function useSimpleMenuContext() {
+export function useSimpleRootMenuContext() {
   return useContext<SimpleRootMenuContextProps>(key)
 }

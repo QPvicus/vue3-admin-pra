@@ -1,36 +1,37 @@
 <template>
-  <ul class="getClass">
+  <ul :class="getClass">
     <slot></slot>
   </ul>
 </template>
 
 <script lang="ts">
-  import {
-    computed,
-    defineComponent,
-    getCurrentInstance,
-    nextTick,
-    onMounted,
-    PropType,
-    provide,
-    ref,
-    watch,
-    watchEffect,
-  } from 'vue'
-  import { propTypes } from '/@/utils/propTypes'
-  import Mitt from '/@/utils/mitt'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { createSimpleMenuContext } from './useSimpleMenuContext'
+  import type { PropType } from 'vue'
   import type { SubMenuProvider } from './types'
+  import {
+    defineComponent,
+    ref,
+    computed,
+    onMounted,
+    watchEffect,
+    watch,
+    nextTick,
+    getCurrentInstance,
+    provide,
+  } from 'vue'
+
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { propTypes } from '/@/utils/propTypes'
+  import { createSimpleRootMenuContext } from './useSimpleMenuContext'
+  import Mitt from '/@/utils/mitt'
   export default defineComponent({
+    name: 'Menu',
     props: {
-      theme: propTypes.oneOf(['light', 'dark']).def('dark'),
+      theme: propTypes.oneOf(['light', 'dark']).def('light'),
       activeName: propTypes.oneOfType([propTypes.string, propTypes.number]),
       openNames: {
         type: Array as PropType<string[]>,
         default: () => [],
       },
-      //  开启手风琴模式
       accordion: propTypes.bool.def(true),
       width: propTypes.string.def('100%'),
       collapsedWidth: propTypes.string.def('48px'),
@@ -41,17 +42,22 @@
         default: () => [],
       },
     },
-    emits: ['select'],
+    emits: ['select', 'open-change'],
     setup(props, { emit }) {
       const rootMenuEmitter = new Mitt()
       const instance = getCurrentInstance()
+
       const currentActiveName = ref<string | number>('')
       const openedNames = ref<string[]>([])
 
       const { prefixCls } = useDesign('menu')
+
       const isRemoveAllPopup = ref(false)
 
-      createSimpleMenuContext({ rootMenuEmitter, activeName: currentActiveName })
+      createSimpleRootMenuContext({
+        rootMenuEmitter: rootMenuEmitter,
+        activeName: currentActiveName,
+      })
 
       const getClass = computed(() => {
         const { theme } = props
@@ -68,11 +74,13 @@
       watchEffect(() => {
         openedNames.value = props.openNames
       })
+
       watchEffect(() => {
         if (props.activeName) {
           currentActiveName.value = props.activeName
         }
       })
+
       watch(
         () => props.openNames,
         () => {
@@ -91,6 +99,7 @@
         openedNames.value.push(name)
         updateOpened()
       }
+
       function removeSubMenu(name: string) {
         openedNames.value = openedNames.value.filter((item) => item !== name)
         updateOpened()
@@ -102,19 +111,20 @@
       }
 
       function sliceIndex(index: number) {
-        openedNames.value = openedNames.value.slice(0, index)
+        if (index === -1) return
+        openedNames.value = openedNames.value.slice(0, index + 1)
         updateOpened()
       }
 
       provide<SubMenuProvider>(`subMenu:${instance?.uid}`, {
         addSubMenu,
         removeSubMenu,
+        getOpenNames: () => openedNames.value,
         removeAll,
         isRemoveAllPopup,
         sliceIndex,
         level: 0,
         props,
-        getOpenNames: () => openedNames.value,
       })
 
       onMounted(() => {
@@ -122,6 +132,7 @@
         updateOpened()
         rootMenuEmitter.on('on-menu-item-select', (name: string) => {
           currentActiveName.value = name
+
           nextTick(() => {
             props.collapse && removeAll()
           })
@@ -138,14 +149,10 @@
         })
       })
 
-      return {
-        getClass,
-        openedNames,
-      }
+      return { getClass, openedNames }
     },
   })
 </script>
-
 <style lang="less">
   @import './menu.less';
 </style>

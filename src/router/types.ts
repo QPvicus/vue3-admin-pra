@@ -19,7 +19,7 @@ export interface RouteMeta {
   transitionName?: string
   hideBreadcrumb?: boolean
   //  hide SubMenu
-  hideChildrenMenu?: boolean
+  hideChildrenInMenu?: boolean
   carryParam?: boolean
   single?: boolean
   currentActiveMenu?: string

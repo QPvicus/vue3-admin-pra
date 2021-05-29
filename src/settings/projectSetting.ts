@@ -20,6 +20,8 @@ const setting: ProjectConfig = {
 
   permissionMode: PermissionModeEnum.ROLE,
 
+  fullContent: false,
+
   menuSetting: {
     bgColor: SIDE_BAR_BG_COLOR_LIST[0],
     fixed: true,

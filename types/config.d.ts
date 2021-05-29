@@ -64,6 +64,8 @@ export interface ProjectConfig {
   colorWeek: boolean
 
   grayMode: boolean
+
+  fullContent: boolean
 }
 
 export interface MenuSetting {

@@ -1,6 +1,7 @@
-import { ComponentInternalInstance, computed, CSSProperties, unref } from 'vue'
+import { computed, ComponentInternalInstance, unref } from 'vue'
+import type { CSSProperties } from 'vue'
 
-export function useMenu(instance: ComponentInternalInstance | null) {
+export function useMenuItem(instance: ComponentInternalInstance | null) {
   const getParentMenu = computed(() => {
     return findParentMenu(['Menu', 'SubMenu'])
   })
@@ -18,6 +19,7 @@ export function useMenu(instance: ComponentInternalInstance | null) {
     if (!parent) return {}
     const indentSize = (unref(getParentRootMenu)?.props.indentSize as number) ?? 20
     let padding = indentSize
+
     if (unref(getParentRootMenu)?.props.collapse) {
       padding = indentSize
     } else {
@@ -28,9 +30,7 @@ export function useMenu(instance: ComponentInternalInstance | null) {
         parent = parent.parent
       }
     }
-    return {
-      paddingLeft: padding + 'px',
-    }
+    return { paddingLeft: padding + 'px' }
   })
 
   function findParentMenu(name: string[]) {
@@ -44,20 +44,18 @@ export function useMenu(instance: ComponentInternalInstance | null) {
 
   function getParentList() {
     let parent = instance
-    if (!parent) {
+    if (!parent)
       return {
         uidList: [],
         list: [],
       }
-    }
-    const ret: ComponentInternalInstance[] = []
+    const ret: any[] = []
     while (parent && parent.type.name !== 'Menu') {
       if (parent.type.name === 'SubMenu') {
         ret.push(parent)
       }
       parent = parent.parent
     }
-
     return {
       uidList: ret.map((item) => item.uid),
       list: ret,
@@ -65,21 +63,22 @@ export function useMenu(instance: ComponentInternalInstance | null) {
   }
 
   function getParentInstance(instance: ComponentInternalInstance, name = 'SubMenu') {
-    const parent = instance.parent
+    let parent = instance.parent
     while (parent) {
       if (parent.type.name !== name) {
         return parent
       }
+      parent = parent.parent
     }
     return parent
   }
 
   return {
     getParentMenu,
+    getParentInstance,
     getParentRootMenu,
+    getParentList,
     getParentSubMenu,
     getItemStyle,
-    getParentList,
-    getParentInstance,
   }
 }

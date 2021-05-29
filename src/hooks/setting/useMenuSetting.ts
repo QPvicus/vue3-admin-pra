@@ -1,10 +1,20 @@
-import { computed, unref } from 'vue'
+import { computed, unref, ref } from 'vue'
+import { useFullContent } from '../web/useFullContent'
 import { MenuSetting } from '/#/config'
+import { SIDE_BAR_MINI_WIDTH, SIDE_BAR_SHOW_TIT_MINI_WIDTH } from '/@/enums/appEnums'
 import { MenuModeEnum, MenuTypeEnum } from '/@/enums/menuEnum'
 import { useAppStore } from '/@/store/modules/app'
-
+const mixSideHasChildren = ref(false)
 export function useMenuSetting() {
+  const { getFullContent: fullContent } = useFullContent()
   const appStore = useAppStore()
+  const getShowSidebar = computed(() => {
+    return (
+      unref(getSplit) ||
+      (unref(getShowMenu) && unref(getMenuMode) !== MenuModeEnum.HORIZONTAL && !unref(fullContent))
+    )
+  })
+
   const getCollapsed = computed(() => appStore.getMenuSetting.collapsed)
   const getMenuType = computed(() => appStore.getMenuSetting.type)
   const getMenuMode = computed(() => appStore.getMenuSetting.mode)
@@ -26,6 +36,27 @@ export function useMenuSetting() {
   const getIsSidebarType = computed(() => unref(getMenuType) === MenuTypeEnum.SIDEBAR)
   const getCollapsedShowTitle = computed(() => appStore.getMenuSetting.collapsedShowTitle)
   const getIsHorizontal = computed(() => unref(getMenuMode) === MenuModeEnum.HORIZONTAL)
+  const getIsMixSidebar = computed(() => {
+    return unref(getMenuType) === MenuTypeEnum.MIX_SIDEBAR
+  })
+  const getIsMixMode = computed(() => {
+    return unref(getMenuMode) === MenuModeEnum.INLINE && unref(getMenuType) === MenuTypeEnum.MIX
+  })
+
+  const getRealWidth = computed(() => {
+    if (unref(getIsMixSidebar)) {
+      return unref(getCollapsed) && !unref(getMixSideFixed)
+        ? unref(getMiniWidthNumber)
+        : unref(getMenuWidth)
+    }
+    return unref(getCollapsed) ? unref(getMiniWidthNumber) : unref(getMenuWidth)
+  })
+
+  const getMiniWidthNumber = computed(() => {
+    const { collapsedShowTitle } = appStore.getMenuSetting
+    return collapsedShowTitle ? SIDE_BAR_SHOW_TIT_MINI_WIDTH : SIDE_BAR_MINI_WIDTH
+  })
+
   // set Menu configuration
   function setMenuSetting(menuSetting: Partial<MenuSetting>): void {
     appStore.setProjectConfig({ menuSetting })
@@ -38,6 +69,7 @@ export function useMenuSetting() {
   }
 
   return {
+    getShowSidebar,
     getAccordion,
     getBgColor,
     getCanDrag,
@@ -59,8 +91,14 @@ export function useMenuSetting() {
     getCollapsedShowTitle,
     getIsSidebarType,
     getIsHorizontal,
+    getIsMixSidebar,
 
     setMenuSetting,
     toggleCollapsed,
+    getIsMixMode,
+
+    getRealWidth,
+    getMiniWidthNumber,
+    mixSideHasChildren,
   }
 }

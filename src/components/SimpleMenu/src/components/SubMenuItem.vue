@@ -10,11 +10,12 @@
         />
       </div>
       <CollapseTransition>
-        <ul :class="getSubClass" v-show="opened">
+        <ul :class="prefixCls" v-show="opened">
           <slot></slot>
         </ul>
       </CollapseTransition>
     </template>
+
     <Popover
       placement="right"
       :overlayClassName="`${prefixCls}-menu-popover`"
@@ -24,12 +25,12 @@
       :overlayStyle="getOverlayStyle"
       :align="{ offset: [0, 0] }"
     >
-      <div :class="getSubClass" v-bind="getEvents(true)">
+      <div :class="getSubClass" v-bind="getEvents(false)">
         <div
           :class="[
             {
               [`${prefixCls}-submenu-popup`]: !getParentSubMenu,
-              [`${prefixCls}-submenu-collapse-show-tit`]: collapseShowTitle,
+              [`${prefixCls}-submenu-collapsed-show-tit`]: collapsedShowTitle,
             },
           ]"
         >
@@ -55,30 +56,29 @@
 </template>
 
 <script lang="ts">
+  import type { CSSProperties, PropType } from 'vue'
+  import type { SubMenuProvider } from './types'
   import {
-    computed,
-    CSSProperties,
     defineComponent,
-    getCurrentInstance,
-    inject,
-    onBeforeMount,
-    PropType,
-    provide,
-    reactive,
-    toRefs,
+    computed,
     unref,
+    getCurrentInstance,
+    toRefs,
+    reactive,
+    provide,
+    onBeforeMount,
+    inject,
   } from 'vue'
-  import { useMenu } from './useMenu'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { propTypes } from '/@/utils/propTypes'
-  import Mitt from '/@/utils/mitt'
-  import { useSimpleMenuContext } from './useSimpleMenuContext'
-  import type { SubMenuProvider } from './types'
-  import { isBoolean } from 'node_modules/@types/lodash'
-  import { isObject } from '/@/utils/is'
-  import Icon from '/@/components/Icon'
+  import { useMenuItem } from './useMenu'
+  import { useSimpleRootMenuContext } from './useSimpleMenuContext'
   import { CollapseTransition } from '/@/components/Transition'
+  import Icon from '/@/components/Icon'
   import { Popover } from 'ant-design-vue'
+  import { isBoolean, isObject } from '/@/utils/is'
+  import Mitt from '/@/utils/mitt'
+  import { Recordable, TimeoutHandler } from '/#/global'
   const DELAY = 200
   export default defineComponent({
     name: 'SubMenu',
@@ -93,30 +93,23 @@
         required: true,
       },
       disabled: propTypes.bool,
-      collapseShowTitle: propTypes.bool,
+      collapsedShowTitle: propTypes.bool,
     },
     setup(props) {
       const instance = getCurrentInstance()
-
       const state = reactive({
         active: false,
         opened: false,
       })
-
       const data = reactive({
         timeout: null as TimeoutHandler | null,
         mouseInChild: false,
         isChild: false,
       })
-
-      const { getParentSubMenu, getItemStyle, getParentMenu, getParentList } = useMenu(instance)
-
+      const { getParentSubMenu, getItemStyle, getParentMenu, getParentList } = useMenuItem(instance)
       const { prefixCls } = useDesign('menu')
-
       const subMenuEmitter = new Mitt()
-
-      const { rootMenuEmitter } = useSimpleMenuContext()
-
+      const { rootMenuEmitter } = useSimpleRootMenuContext()
       const {
         addSubMenu: parentAddSubmenu,
         removeSubMenu: parentRemoveSubmenu,
@@ -128,7 +121,6 @@
         props: rootProps,
         handleMouseleave: parentHandleMouseleave,
       } = inject<SubMenuProvider>(`subMenu:${getParentMenu.value?.uid}`)!
-
       const getClass = computed(() => {
         return [
           `${prefixCls}-submenu`,
@@ -141,17 +133,14 @@
           },
         ]
       })
-
       const getAccordion = computed(() => rootProps.accordion)
       const getCollapse = computed(() => rootProps.collapse)
       const getTheme = computed(() => rootProps.theme)
-
       const getOverlayStyle = computed((): CSSProperties => {
         return {
           minWidth: '200px',
         }
       })
-
       const getIsOpend = computed(() => {
         const name = props.name
         if (unref(getCollapse)) {
@@ -159,7 +148,6 @@
         }
         return state.opened
       })
-
       const getSubClass = computed(() => {
         const isActive = rootProps.activeSubMenuNames.includes(props.name)
         return [
@@ -171,7 +159,6 @@
           },
         ]
       })
-
       function getEvents(deep: boolean) {
         if (!unref(getCollapse)) {
           return {}
@@ -181,12 +168,10 @@
           onMouseleave: () => handleMouseleave(deep),
         }
       }
-
       function handleClick() {
         const { disabled } = props
         if (disabled || unref(getCollapse)) return
         const opened = state.opened
-
         if (unref(getAccordion)) {
           const { uidList } = getParentList()
           rootMenuEmitter.emit('on-update-opened', {
@@ -202,17 +187,12 @@
         }
         state.opened = !opened
       }
-
       function handleMouseenter() {
         const disabled = props.disabled
         if (disabled) return
-
         subMenuEmitter.emit('submenu:mouse-enter-child')
-
         const index = parentGetOpenNames().findIndex((item) => item === props.name)
-
         sliceIndex(index)
-
         const isRoot = level === 0 && parentGetOpenNames().length === 2
         if (isRoot) {
           parentRemoveAll()
@@ -223,17 +203,14 @@
           parentAddSubmenu(props.name)
         }, DELAY)
       }
-
       function handleMouseleave(deepDispatch = false) {
         const parentName = getParentMenu.value?.props.name
         if (!parentName) {
           isRemoveAllPopup.value = true
         }
-
         if (parentGetOpenNames().slice(-1)[0] === props.name) {
           data.isChild = false
         }
-
         subMenuEmitter.emit('submenu:mouse-leave-child')
         if (data.timeout) {
           clearTimeout(data.timeout!)
@@ -251,7 +228,6 @@
           }
         }
       }
-
       onBeforeMount(() => {
         subMenuEmitter.on('submenu:mouse-enter-child', () => {
           data.mouseInChild = true
@@ -263,7 +239,6 @@
           data.mouseInChild = false
           clearTimeout(data.timeout!)
         })
-
         rootMenuEmitter.on(
           'on-update-opened',
           (data: boolean | (string | number)[] | Recordable) => {
@@ -272,7 +247,6 @@
               state.opened = data
               return
             }
-
             if (isObject(data)) {
               const { opend, parent, uidList } = data as Recordable
               if (parent === instance?.parent) {
@@ -282,24 +256,20 @@
               }
               return
             }
-
             if (props.name && Array.isArray(data)) {
               state.opened = (data as (string | number)[]).includes(props.name)
             }
           }
         )
-
         rootMenuEmitter.on('on-update-active-name:submenu', (data: number[]) => {
           if (instance?.uid) {
             state.active = data.includes(instance?.uid)
           }
         })
       })
-
       function handleVisibleChange(visible: boolean) {
         state.opened = visible
       }
-
       // provide
       provide<SubMenuProvider>(`subMenu:${instance?.uid}`, {
         addSubMenu: parentAddSubmenu,
@@ -312,7 +282,6 @@
         handleMouseleave,
         props: rootProps,
       })
-
       return {
         getClass,
         prefixCls,

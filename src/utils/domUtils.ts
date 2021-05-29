@@ -51,3 +51,23 @@ export function removeClass(el: Element, cls: string) {
     el.className = trim(curClass)
   }
 }
+
+export function on(
+  element: Element | HTMLElement | Document | Window,
+  event: string,
+  handler: EventListenerOrEventListenerObject
+): void {
+  if (element && event && handler) {
+    element.addEventListener(event, handler)
+  }
+}
+
+export function off(
+  element: Element | HTMLElement | Document | Window,
+  event: string,
+  handler: Fn
+): void {
+  if (element && event && handler) {
+    element.removeEventListener(event, handler, false)
+  }
+}

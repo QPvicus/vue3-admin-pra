@@ -4,6 +4,7 @@ import html from 'vite-plugin-html'
 
 import pkg from '../../../package.json'
 import { GLOBAL_CONFIG_FILE_NAME } from '../../constant'
+import { ViteEnv } from '/#/global'
 
 export function configHtmlPlugin(env: ViteEnv, isBuild: boolean) {
   const { VITE_GLOB_APP_TITLE, VITE_PUBLIC_PATH } = env

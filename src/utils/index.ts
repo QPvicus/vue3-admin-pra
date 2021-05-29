@@ -1,6 +1,7 @@
 import { isObject } from './is'
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
+export const noop = () => {}
 export function setObjToUrlParams(baseUrl: string, obj: any): string {
   let parameter = ''
   for (const key in obj) {

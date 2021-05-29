@@ -1,5 +1,6 @@
 import { tryOnUnmounted } from '@vueuse/shared'
 import { ref, watch } from 'vue'
+import { TimeoutHandler } from '/#/global'
 import { isFunction } from '/@/utils/is'
 
 export function useTimeoutFn(handle: Fn, wait: number, native = false) {

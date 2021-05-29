@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { PropType as VuePropType } from 'vue'
+
+declare type PropType<T> = VuePropType<T>
+
 declare type Recordable<T extends any = any> = Record<string, T>
 
 declare type ReadonlyRecordable<T = any> = {

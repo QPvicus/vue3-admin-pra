@@ -1,6 +1,6 @@
 <template>
   <Menu
-    v-bind="getBindValue"
+    v-bind="getBindValues"
     :activeName="activeName"
     :openNames="getOpenKeys"
     :class="prefixCls"
@@ -11,30 +11,32 @@
       <SimpleSubMenu
         :item="item"
         :parent="true"
+        :collapsedShowTitle="collapsedShowTitle"
         :collapse="collapse"
-        :collapseShowTitle="collapseShowTitle"
       />
     </template>
   </Menu>
 </template>
-
 <script lang="ts">
-  import { computed, defineComponent, PropType, reactive, ref, toRefs, unref, watch } from 'vue'
+  import type { MenuState } from './types'
+  import type { Menu as MenuType } from '/@/router/types'
+  import type { RouteLocationNormalizedLoaded } from 'vue-router'
+
+  import { defineComponent, computed, ref, unref, reactive, toRefs, watch, PropType } from 'vue'
+  import { useDesign } from '/@/hooks/web/useDesign'
+
   import Menu from './components/Menu.vue'
   import SimpleSubMenu from './SimpleSubMenu.vue'
-  import type { Menu as MenuType } from '/@/router/types'
-  import { propTypes } from '/@/utils/propTypes'
-  import type { MenuState } from './types'
-  import { RouteLocationNormalizedLoaded, useRouter } from 'vue-router'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { useOpenKeys } from './useOpenKeys'
   import { listenerRouteChange } from '/@/logics/mitt/routeChange'
+  import { propTypes } from '/@/utils/propTypes'
   import { REDIRECT_NAME } from '/@/router/constant'
+  import { useRouter } from 'vue-router'
   import { isFunction, isUrl } from '/@/utils/is'
   import { openWindow } from '/@/utils'
 
+  import { useOpenKeys } from './useOpenKeys'
   export default defineComponent({
-    name: 'SimoleMenu',
+    name: 'SimpleMenu',
     components: {
       Menu,
       SimpleSubMenu,
@@ -49,7 +51,7 @@
       mixSider: propTypes.bool,
       theme: propTypes.string,
       accordion: propTypes.bool.def(true),
-      collapseShowTitle: propTypes.bool,
+      collapsedShowTitle: propTypes.bool,
       beforeClickFn: {
         type: Function as PropType<(key: string) => Promise<boolean>>,
       },
@@ -57,19 +59,19 @@
     },
     emits: ['menuClick'],
     setup(props, { attrs, emit }) {
-      const curretnActiveMenu = ref('')
+      const currentActiveMenu = ref('')
       const isClickGo = ref(false)
 
-      const getBindValue = computed(() => ({ ...props, ...attrs }))
       const menuState = reactive<MenuState>({
         activeName: '',
         openNames: [],
         activeSubMenuNames: [],
       })
+
       const { currentRoute } = useRouter()
       const { prefixCls } = useDesign('simple-menu')
+      const { items, accordion, mixSider, collapse } = toRefs(props)
 
-      const { items, accordion, collapse, mixSider } = toRefs(props)
       const { setOpenKeys, getOpenKeys } = useOpenKeys(
         menuState,
         items,
@@ -77,6 +79,8 @@
         mixSider,
         collapse
       )
+
+      const getBindValues = computed(() => ({ ...attrs, ...props }))
 
       watch(
         () => props.collapse,
@@ -87,9 +91,7 @@
             setOpenKeys(currentRoute.value.path)
           }
         },
-        {
-          immediate: true,
-        }
+        { immediate: true }
       )
 
       watch(
@@ -100,20 +102,18 @@
           }
           setOpenKeys(currentRoute.value.path)
         },
-        {
-          flush: 'post',
-        }
+        { flush: 'post' }
       )
 
       listenerRouteChange((route) => {
-        if (route.path === REDIRECT_NAME) return
+        if (route.name === REDIRECT_NAME) return
 
-        curretnActiveMenu.value = route.meta?.curretnActiveMenu as string
+        currentActiveMenu.value = route.meta?.currentActiveMenu as string
         handleMenuChange(route)
 
-        if (unref(curretnActiveMenu)) {
-          menuState.activeName = unref(curretnActiveMenu)
-          setOpenKeys(unref(curretnActiveMenu))
+        if (unref(currentActiveMenu)) {
+          menuState.activeName = unref(currentActiveMenu)
+          setOpenKeys(unref(currentActiveMenu))
         }
       })
 
@@ -122,7 +122,6 @@
           isClickGo.value = false
           return
         }
-
         const path = (route || unref(currentRoute)).path
         menuState.activeName = path
 
@@ -139,14 +138,17 @@
           const flag = await beforeClickFn(key)
           if (!flag) return
         }
+
         emit('menuClick', key)
+
         isClickGo.value = true
         setOpenKeys(key)
         menuState.activeName = key
       }
+
       return {
         prefixCls,
-        getBindValue,
+        getBindValues,
         handleSelect,
         getOpenKeys,
         ...toRefs(menuState),
@@ -154,7 +156,6 @@
     },
   })
 </script>
-
 <style lang="less">
   @import './index.less';
 </style>
