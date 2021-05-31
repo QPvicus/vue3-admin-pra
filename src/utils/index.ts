@@ -44,3 +44,7 @@ export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormal
       : undefined) as RouteRecordNormalized[],
   }
 }
+
+export function getPopupContainer(node?: HTMLElement): HTMLElement {
+  return (node?.parentNode as HTMLElement) ?? document.body
+}

@@ -94,7 +94,7 @@
   import { useDragLine } from './useLayoutSider'
   import { useGlobSetting } from '/@/hooks/setting'
   import { useDesign } from '/@/hooks/web/useDesign'
-  import { useI18n } from '/@/hooks/web/useI18n'
+  import { useI18n } from '/@/hooks/web/usei18n'
   import { useGo } from '/@/hooks/web/useGo'
 
   import { SIDE_BAR_SHOW_TIT_MINI_WIDTH, SIDE_BAR_MINI_WIDTH } from '/@/enums/appEnums'
@@ -103,7 +103,6 @@
   import { getShallowMenus, getChildrenMenus, getCurrentParentPath } from '/@/router/menus'
   import { listenerRouteChange } from '/@/logics/mitt/routeChange'
   import { SimpleMenu } from '/@/components/SimpleMenu'
-  import { Nullable } from '/#/global'
 
   export default defineComponent({
     name: 'LayoutMixSider',

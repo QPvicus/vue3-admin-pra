@@ -1,3 +1,5 @@
+import CollapseContainer from './src/collapse/CollapseContainer.vue'
 import ScrollContainer from './src/ScrollContainer.vue'
 
-export { ScrollContainer }
+export { CollapseContainer, ScrollContainer }
+export * from './src/types'

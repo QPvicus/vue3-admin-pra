@@ -39,6 +39,7 @@ export function useMenuSetting() {
   const getIsMixSidebar = computed(() => {
     return unref(getMenuType) === MenuTypeEnum.MIX_SIDEBAR
   })
+  const getIsTopMenu = computed(() => unref(getMenuType) === MenuTypeEnum.TOP_MENU)
   const getIsMixMode = computed(() => {
     return unref(getMenuMode) === MenuModeEnum.INLINE && unref(getMenuType) === MenuTypeEnum.MIX
   })
@@ -57,6 +58,17 @@ export function useMenuSetting() {
     return collapsedShowTitle ? SIDE_BAR_SHOW_TIT_MINI_WIDTH : SIDE_BAR_MINI_WIDTH
   })
 
+  //  没看懂
+  const getCalcContentWidth = computed(() => {
+    const width =
+      unref(getIsTopMenu) || !unref(getShowMenu) || (unref(getSplit) && unref(getMenuHidden))
+        ? 0
+        : unref(getIsMixSidebar)
+        ? (unref(getCollapsed) ? SIDE_BAR_MINI_WIDTH : SIDE_BAR_SHOW_TIT_MINI_WIDTH) +
+          (unref(getMixSideFixed) && unref(mixSideHasChildren) ? unref(getRealWidth) : 0)
+        : unref(getRealWidth)
+    return `calc(100% - ${width}px)`
+  })
   // set Menu configuration
   function setMenuSetting(menuSetting: Partial<MenuSetting>): void {
     appStore.setProjectConfig({ menuSetting })
@@ -92,7 +104,7 @@ export function useMenuSetting() {
     getIsSidebarType,
     getIsHorizontal,
     getIsMixSidebar,
-
+    getIsTopMenu,
     setMenuSetting,
     toggleCollapsed,
     getIsMixMode,
@@ -100,5 +112,6 @@ export function useMenuSetting() {
     getRealWidth,
     getMiniWidthNumber,
     mixSideHasChildren,
+    getCalcContentWidth,
   }
 }

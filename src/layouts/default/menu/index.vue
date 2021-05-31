@@ -19,7 +19,6 @@
   import { useRootSetting } from '/@/hooks/setting/useRootSetting'
   import { useAppInject } from '/@/hooks/web/useAppInject'
   import { useDesign } from '/@/hooks/web/useDesign'
-  import { Nullable } from '/#/global'
 
   export default defineComponent({
     name: 'LayoutMenu',

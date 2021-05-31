@@ -5,18 +5,24 @@ import { wrapperEnv } from './build/utils'
 import { createProxy } from './build/vite/proxy'
 import { createVitePlugins } from './build/vite/plugins/index'
 import { generateModifyVars } from './build/generate/generateModifyVars'
+import pkg from './package.json'
+import moment from 'moment'
 // https://vitejs.dev/config/
 function resolvePath(dir: string) {
   return resolve(process.cwd(), '.', dir)
 }
 
+const { dependencies, devDependencies, name, version } = pkg
+const __APP_INFO__ = {
+  pkg: { dependencies, devDependencies, name, version },
+  lastBuildTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+}
 export default ({ mode, command }: ConfigEnv): UserConfig => {
   const root = process.cwd()
   const env = loadEnv(mode, root)
   const viteEnv = wrapperEnv(env)
   const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY } = viteEnv
   const isBuild = command === 'build'
-  console.log(VITE_PROXY, 'VITE_PROXY')
   return {
     base: VITE_PUBLIC_PATH,
     root,
@@ -47,9 +53,8 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       },
     },
     define: {
-      __VUE_I18N_LEGACY_API__: false,
-      __VUE_I18N_FULL_INSTALL__: false,
       __INTLIFY_PROD_DEVTOOLS__: false,
+      __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
     optimizeDeps: {
       exclude: ['vue-demi'],

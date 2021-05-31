@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref, nextTick } from 'vue'
-  import { Nullable } from '/#/global'
   import { Scrollbar, ScrollbarType } from '/@/components/Scrollbar'
 
   import { useScrollTo } from '/@/hooks/event/useScrollTo'
